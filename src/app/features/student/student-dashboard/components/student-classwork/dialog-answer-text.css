@@ -1,0 +1,9 @@
+quill-editor {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 0px !important;
+}

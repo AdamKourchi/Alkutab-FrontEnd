@@ -1,0 +1,109 @@
+<div class="flex justify-between items-center mx-5">
+  <h2 mat-dialog-title>انشئ السؤال :</h2>
+  <div class="flex gap-2">
+    <button mat-button mat-dialog-close type="button">إلغاء</button>
+    <button
+      mat-flat-button
+      color="accent"
+      type="submit"
+      (click)="onSubmit()"
+      [disabled]="textForm.invalid"
+    >
+      حفظ
+    </button>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+<form
+enctype="multipart/form-data"
+  class="flex flex-col gap-5"
+  [formGroup]="textForm"
+>
+  <mat-card appearance="outlined" class="!bg-white mx-32 my-5">
+    <mat-card-content>
+      <div class="flex justify-between items-center gap-2">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>السؤال</mat-label>
+          <input matInput formControlName="question" required />
+          @if (textForm.get('question')?.hasError('required') &&
+          textForm.get('question')?.touched) {
+          <mat-error> هذا الحقل مطلوب </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>موعد التسليم</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="deadline"
+            [matDatepickerFilter]="dateFilter"
+            required
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker
+            #picker
+            startView="month"
+          >
+          </mat-datepicker>
+
+          @if (textForm.get('instructions')?.hasError('required') &&
+          textForm.get('instructions')?.touched) {
+          <mat-error> هذا الحقل مطلوب </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <!-- Quill Editor Field -->
+      <div class="w-full mb-4">
+        <mat-label class="my-2 block almarai">التعليمات (اختياري) :</mat-label>
+        <quill-editor
+          formControlName="instructions"
+          [modules]="editorModules"
+          (onEditorCreated)="onEditorCreated($event)"
+          placeholder=""
+        >
+        </quill-editor>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined" class="!bg-white mx-32">
+    <mat-card-content class="!flex !justify-between !items-center">
+      <label class="almarai"> ملف مرفق : (اختياري)</label>
+      <mat-form-field class="!flex  !items-center" appearance="fill">
+        <mat-label>تحميل ملف</mat-label>
+
+        <!-- Fake text input to show the file name -->
+        <input
+          matInput
+          [value]="selectedFileName"
+          placeholder="اختر ملف..."
+          disabled
+        />
+
+        <!-- Real hidden file input -->
+        <input
+          type="file"
+          hidden
+          #fileInput
+          (change)="onFileSelected($event)"
+        />
+
+        <!-- Button to trigger file input -->
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="fileInput.click()"
+          aria-label="Upload file"
+        >
+          <mat-icon>upload</mat-icon>
+        </button>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+</form>

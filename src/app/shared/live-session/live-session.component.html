@@ -1,0 +1,52 @@
+<div
+  class="p-5 flex justify-between items-center almarai text-2xl"
+  id="toolbar"
+>
+  <img src="assets/images/full-logo.png" width="200px" />
+  <p>{{ session.course.title }}</p>
+  <p>{{ session.course.teacher.name }}</p>
+</div>
+<hr />
+
+
+@if(role=="teacher"){
+  <div class="flex justify-end p-2 gap-2">
+<button 
+    [disabled]="notified" 
+    mat-flat-button 
+    (click)="!notified ? notifyStudents() : null">
+    <mat-icon> notifications_active </mat-icon>
+    إشعار الطلبة
+</button>
+
+  <button mat-flat-button class="!bg-red-600" 
+  (click)="session.id !== null ? endSession(session.id) : null">
+    <mat-icon> logout </mat-icon>
+    إنهاء الجلسة
+  </button>
+</div>
+}@else {
+  <div class="flex justify-end p-2 gap-2">
+    <button 
+      mat-flat-button 
+      (click)="navigateToDashboard()">
+      <mat-icon> dashboard </mat-icon>
+      العودة إلى الركن
+    </button>
+    
+
+    </div>
+}
+
+@if(loading){
+<div class="flex justify-center items-center h-screen">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+}
+
+<div class="jitsi-wrapper mx-5 ">
+  <div id="jitsi-container" style="width: 100%; height: 700px"></div>
+</div>

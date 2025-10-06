@@ -1,0 +1,57 @@
+<div class="container mx-auto p-4">
+  <mat-card class="max-w-2xl mx-auto">
+    <mat-card-header class="mb-6">
+      <mat-card-title class="text-2xl font-bold">الملف الشخصي</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Name Field -->
+        <mat-form-field class="w-full">
+          <mat-label>الاسم</mat-label>
+          <input matInput formControlName="name" placeholder="أدخل اسمك">
+          <mat-error *ngIf="profileForm.get('name')?.hasError('required')">
+            الاسم مطلوب
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Current Password Field -->
+        <mat-form-field class="w-full">
+          <mat-label>كلمة المرور الحالية</mat-label>
+          <input matInput type="password" formControlName="currentPassword" placeholder="أدخل كلمة المرور الحالية">
+          <mat-error *ngIf="profileForm.get('currentPassword')?.hasError('required')">
+            كلمة المرور الحالية مطلوبة
+          </mat-error>
+        </mat-form-field>
+
+        <!-- New Password Field -->
+        <mat-form-field class="w-full">
+          <mat-label>كلمة المرور الجديدة</mat-label>
+          <input matInput type="password" formControlName="newPassword" placeholder="أدخل كلمة المرور الجديدة">
+          <mat-error *ngIf="profileForm.get('newPassword')?.hasError('required')">
+            كلمة المرور الجديدة مطلوبة
+          </mat-error>
+          <mat-error *ngIf="profileForm.get('newPassword')?.hasError('minlength')">
+            كلمة المرور يجب أن تكون 6 أحرف على الأقل
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Confirm Password Field -->
+        <mat-form-field class="w-full">
+          <mat-label>تأكيد كلمة المرور</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" placeholder="أعد إدخال كلمة المرور الجديدة">
+          <mat-error *ngIf="profileForm.get('confirmPassword')?.hasError('required')">
+            تأكيد كلمة المرور مطلوب
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+          <button mat-flat-button color="primary" type="submit" [disabled]="!profileForm.valid">
+            حفظ التغييرات
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

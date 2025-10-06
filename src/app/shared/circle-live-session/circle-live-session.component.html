@@ -1,0 +1,53 @@
+<div class="app-wrapper">
+  <!-- <div
+  class="toolbar flex justify-end items-center almarai text-2xl"
+  id="toolbar"
+>
+  @if(role=="teacher"){
+    <div class="flex justify-end gap-2">
+      <button
+        mat-flat-button
+        class="!bg-red-600"
+        (click)="circle.id !== null ? endLiveCircle() : null"
+      >
+        <mat-icon> logout </mat-icon>
+        إنهاء الجلسة
+      </button>
+    </div>
+  }@else {
+    <div class="flex justify-end p-2 gap-2">
+      <button mat-flat-button (click)="navigateToDashboard()">
+        <mat-icon> dashboard </mat-icon>
+        العودة إلى الركن
+      </button>
+    </div>
+  }
+</div> -->
+
+  @if(loading){
+  <div class="flex justify-center items-center h-screen">
+    <mat-progress-spinner
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+  }
+
+  <div class="jitsi-wrapper">
+    <div id="jitsi-container"></div>
+  </div>
+
+  <!-- Bottom Sheet Trigger Button -->
+
+  @if(role=="teacher"){
+  <button
+    mat-fab
+    class="bottom-sheet-toggle"
+    (click)="openBottomSheet()"
+    aria-label="Show Table"
+  >
+    <mat-icon>table_view</mat-icon>
+  </button>
+
+  }
+</div>

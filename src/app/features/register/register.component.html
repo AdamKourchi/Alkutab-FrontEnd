@@ -1,0 +1,76 @@
+<div class="row flex items-center justify-center h-screen">
+  <div class="flex-1 mx-10">
+    <div class="flex flex-col items-center justify-around h-screen">
+      <div>
+        <h2 class="almarai font-bold text-xl">إنشاء حساب جديد</h2>
+        <mat-divider class="w-full"></mat-divider>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
+        <!-- Name Field -->
+        <mat-form-field appearance="fill" class="w-xl">
+          <mat-label>الاسم الكامل</mat-label>
+          <input matInput formControlName="name" placeholder="أدخل اسمك الكامل" />
+          @if(registerForm.get('name')?.hasError('required')) {
+            <mat-error>يجب إدخال الاسم الكامل</mat-error>
+          }
+          @if(registerForm.get('name')?.hasError('minlength')) {
+            <mat-error>يجب أن يكون الاسم 3 أحرف على الأقل</mat-error>
+          }
+        </mat-form-field>
+        <br />
+
+        <!-- Email Field -->
+        <mat-form-field appearance="fill" class="w-xl">
+          <mat-label>البريد الإلكتروني</mat-label>
+          <input matInput formControlName="email" placeholder="أدخل بريدك الإلكتروني" />
+          @if(registerForm.get('email')?.hasError('required')) {
+            <mat-error>يجب إدخال البريد الإلكتروني</mat-error>
+          }
+          @if(registerForm.get('email')?.hasError('email')) {
+            <mat-error>البريد الإلكتروني غير صالح</mat-error>
+          }
+        </mat-form-field>
+        <br />
+
+        <!-- Password Field -->
+        <mat-form-field appearance="fill" class="w-xl">
+          <mat-label>كلمة المرور</mat-label>
+          <input matInput type="password" formControlName="password" placeholder="أدخل كلمة المرور" />
+          @if(registerForm.get('password')?.hasError('required')) {
+            <mat-error>يجب إدخال كلمة المرور</mat-error>
+          }
+          @if(registerForm.get('password')?.hasError('minlength')) {
+            <mat-error>يجب أن تكون كلمة المرور 6 أحرف على الأقل</mat-error>
+          }
+        </mat-form-field>
+        <br />
+
+        <!-- Confirm Password Field -->
+        <mat-form-field appearance="fill" class="w-xl">
+          <mat-label>تأكيد كلمة المرور</mat-label>
+          <input matInput type="password" formControlName="password_confirmation" placeholder="أعد إدخال كلمة المرور" />
+          @if(registerForm.get('confirmPassword')?.hasError('required')) {
+            <mat-error>يجب إدخال تأكيد كلمة المرور</mat-error>
+          }
+        </mat-form-field>
+        <br />
+
+        <!-- Error Message -->
+        @if(errorMessage) {
+          <div class="error-message text-red-500 mt-4">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <!-- Submit Button -->
+        <button mat-flat-button color="primary" class="w-xl" [disabled]="registerForm.invalid">تسجيل</button>
+      </form>
+
+      <div id="footer">
+        <img class="w-50" src="assets/images/full-logo.png" alt="" />
+      </div>
+    </div>
+  </div>
+  <div class="flex-1 border border-green-700 hidden lg:flex" id="register-image"></div>
+</div>

@@ -1,0 +1,111 @@
+@if(loading) {
+<div class="flex justify-center items-center h-screen">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+} @else {
+<div class="my-5 mx-32">
+  <mat-card appearance="outlined" class="!shadow-md !p-5 text-white" id="card">
+    <p class="mb-8 zahey text-2xl">مسار : {{ course.level?.path?.name }}.</p>
+
+    <div class="flex justify-between items-center almarai text-xl">
+      <p>دورة : {{ course.title }}</p>
+      <p>المستوى : {{ course.level?.name }}</p>
+    </div>
+  </mat-card>
+
+  <!-- Grid Layout -->
+  <div class="grid grid-cols-4 gap-4 mt-5">
+    <!-- Posts Section -->
+    <div class="col-span-3">
+      @for(post of posts; track $index) {
+      <mat-card appearance="outlined" class="!shadow-md !p-5 !bg-white mb-4">
+        <mat-card-header>
+          <div class="flex justify-between items-center w-full">
+            <div class="flex items-center gap-4">
+              <img
+                mat-card-avatar
+                src="assets/icons/user.svg"
+                alt="Teacher Image"
+                width="300"
+              />
+              <div>
+                <p class="text-gray-800 text-lg">
+                  {{ post.course?.teacher?.name }}
+                </p>
+                <div class="flex gap-2">
+                  <p class="text-gray-800 text-sm">
+                    {{ post.createdAt | date : "d MMMM" }}
+                  </p>
+                  <p class="text-gray-800 text-sm">
+                    {{ post.createdAt | date : "h:mm a" }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+
+        <mat-card-content class="!overflow-y-scroll">
+          <div class="post-content" [innerHTML]="post.content"></div>
+        </mat-card-content>
+
+        @if((post.files ?? []).length > 0) {
+        <div class="mt-2">
+          <p class="text-gray-800 text-sm">ملفات مرفقة</p>
+          @for(file of post.files; track $index) { @if(file.id){
+          <button mat-button *ngIf="file.filePath" (click)="downloadFile(file.filePath)">
+            <mat-icon>download</mat-icon> تحميل
+          </button>
+          } }
+        </div>
+        }
+      </mat-card>
+      } @empty {
+      <mat-card appearance="outlined" class="!shadow-md !p-5 !bg-white">
+        <div
+          class="text-gray-500 almarai !flex !justify-center !items-center h-full"
+        >
+          <div class="flex gap-2 justify-center items-center">
+            <mat-icon>info</mat-icon>
+            هنا تجد المنشورات و الملفات التي قام الأستاذ بنشرها.
+          </div>
+        </div>
+      </mat-card>
+      }
+    </div>
+    <!-- Next Session Card -->
+    <div class="col-span-1">
+      <mat-card appearance="outlined" class="!shadow-md !p-5 !bg-white">
+        <h2 class="text-lg font-bold almarai">الحصة القادمة</h2>
+        <mat-divider class="!my-2"></mat-divider>
+        <div class="my-2" *ngIf="nextSession; else noSession">
+          <p class="almarai">
+            <strong>التاريخ:</strong> {{ nextSession.formattedStartDate }}
+          </p>
+          <p class="almarai">
+            <strong>الوقت:</strong>
+            {{ nextSession.sessionStartDate | date : "shortTime" }}
+          </p>
+        </div>
+        <ng-template #noSession>
+          <p>لا توجد حصص قادمة.</p>
+        </ng-template>
+
+        <!-- <div class="flex justify-center">
+          <button
+            mat-flat-button
+            class="!w-1/2"
+            type="button"
+            (click)="joinLiveSession()"
+          >
+            <mat-icon>podcasts</mat-icon> انضم للبث
+          </button>
+        </div> -->
+      </mat-card>
+    </div>
+  </div>
+</div>
+}

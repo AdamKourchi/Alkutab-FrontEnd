@@ -1,0 +1,8 @@
+.active-link {
+    color: #4caf4f; /* Material Design primary color */
+    font-weight: bold;
+    background-color: #292a2c1a; /* Light background for active link */
+    border-left: 4px solid #4caf50; /* Highlight with a border */
+    border-radius: 20px; /* Rounded corners */
+  }
+

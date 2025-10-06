@@ -1,0 +1,94 @@
+<div class="flex justify-between items-center mx-5">
+  <h2 mat-dialog-title>تصحيح الاختبار :</h2>
+  <div class="flex gap-2">
+    <button mat-button mat-dialog-close type="button">إلغاء</button>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div class="grid grid-cols-5">
+  <mat-card class="!bg-white mx-5 my-5 col-span-1">
+    <mat-card-content>
+      <mat-nav-list>
+        @for (student of students; track student.id) {
+          <a
+            class="flex justify-center items-center py-2 gap-2 hover:bg-[#292a2c1a] hover:rounded-2xl cursor-pointer"
+            [class.bg-gray-200]="selectedStudent?.id === student.id"
+            (click)="selectStudent(student)"
+          >
+            @if(hasTeacherComment(student)){
+              <mat-icon style="color: green;">check</mat-icon>
+            }
+            <mat-icon>account_circle</mat-icon>
+            <span>{{ student.name }}</span>
+          </a>
+          <mat-divider class="!mx-5"></mat-divider>
+        }
+      </mat-nav-list>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="!bg-white col-span-4 my-5 me-5">
+    <mat-card-content *ngIf="selectedSubmission">
+      <div class="w-full">
+        <h3 class="text-lg font-semibold mb-4">إجابات الطالب</h3>
+        
+        @for(answer of selectedSubmission.answers; track answer.id){
+          <div class="border p-4 rounded-lg mb-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="font-medium mb-4">السؤال: {{ answer.question?.question }}</p>
+                <div class="space-y-2">
+                  @if(answer.question?.type === 'multiple_choice'){
+                    <p class="text-gray-600">
+                      اختيار الطالب: {{ getStudentSelectedOption(answer) }}
+                    </p>
+                  }@else{
+                    <p class="text-gray-600">إجابة الطالب: {{ answer.answerText }}</p>
+                  }
+                  @if(answer.question?.correctAnswer){
+                    <p class="text-green-600">الإجابة الصحيحة: {{ answer.question?.correctAnswer || 'لا يوجد إجابة صحيحة' }}</p>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="mt-6">
+          <h3 class="text-lg font-semibold mb-4">التعليق</h3>
+          
+          @if(exam.isFinal){
+            <mat-form-field class="w-full mb-4">
+              <mat-label>قرار الانتقال للمستوى التالي</mat-label>
+              <mat-select [(ngModel)]="nextLevelDecision">
+                <mat-option value="pass">ناجح - الانتقال للمستوى التالي</mat-option>
+                <mat-option value="fail">راسب - إعادة المستوى</mat-option>
+              </mat-select>
+            </mat-form-field>
+          }
+
+          <mat-form-field class="w-full">
+            <mat-label>تعليق الأستاذ</mat-label>
+            <textarea matInput [(ngModel)]="selectedSubmission.teacherComment"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <button mat-flat-button color="primary" (click)="submitCorrection()">حفظ التصحيح</button>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-content *ngIf="!selectedSubmission">
+      <div class="flex justify-center items-center h-64">
+        <p class="text-gray-500">لم يقم هذا الطالب بتقديم الاختبار بعد</p>
+      </div>
+    </mat-card-content>
+
+    
+  </mat-card>
+</div> 
+
+

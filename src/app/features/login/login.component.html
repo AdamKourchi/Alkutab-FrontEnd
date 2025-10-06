@@ -1,0 +1,61 @@
+<div class="row flex items-center justify-center h-screen">
+  <div class="flex-1 mx-10">
+    <div class="flex flex-col items-center justify-around h-screen">
+      <div>
+        <h2 class="almarai font-bold text-xl">تسجيل الدخول</h2>
+
+        <mat-divider class="w-full"></mat-divider>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="w-sm lg:w-xl">
+          <mat-label>البريد الإلكتروني</mat-label>
+          <input matInput formControlName="email" required type="email" />
+          @if(loginForm.get('email')?.hasError('required')){
+          <mat-error> يجب إدخال البريد الإلكتروني </mat-error>
+
+          } @if(loginForm.get('email')?.hasError('email') &&
+          !loginForm.get('email')?.hasError('required')){
+          <mat-error> البريد الإلكتروني غير صالح </mat-error>
+
+          }
+        </mat-form-field>
+        <br />
+        <br>
+        <mat-form-field appearance="fill" class="w-sm lg:w-xl">
+          <mat-label>كلمة المرور</mat-label>
+          <input matInput type="password" formControlName="password" required />
+          @if(loginForm.get('password')?.hasError('required')){
+            <mat-error> يجب إدخال كلمة المرور </mat-error>
+  
+            }
+            
+      
+        </mat-form-field>
+        <br>
+        <br />
+        <button mat-flat-button color="primary" class="w-sm lg:w-xl">دخول</button>
+        <!-- Error message -->
+        @if(errorMessage){
+        <div class="error-message text-red-500 mt-4">
+          {{ errorMessage }}
+        </div>
+        }
+        <div class="register-link">
+          <span>ليس لديك حساب؟</span>
+          <a routerLink="/register">سجل هنا</a>
+
+          
+        </div>
+      </form>
+
+      <div id="footer">
+        <img class="w-50" src="assets/images/full-logo.png" alt="" />
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex-1 border border-green-700 hidden lg:flex"
+    id="login-image"
+  ></div>
+</div>

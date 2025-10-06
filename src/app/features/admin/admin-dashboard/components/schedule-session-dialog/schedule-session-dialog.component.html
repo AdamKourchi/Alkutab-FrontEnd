@@ -1,0 +1,110 @@
+<h2 mat-dialog-title class="text-center">
+  {{ isEditMode ? "تعديل الحصة" : "إضافة حصة جديدة" }}
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+    <!-- Sessions Tab -->
+    <mat-tab label="الحصص">
+      <form [formGroup]="sessionForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 gap-4 mt-4">
+          <!-- Course Selection -->
+          <mat-form-field appearance="outline">
+            <mat-label>الدورة</mat-label>
+            <mat-select formControlName="courseId" required>
+              @for(course of courses; track course.id) {
+                <mat-option [value]="course.id">{{ course.title }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Date Selection -->
+          <mat-form-field appearance="outline">
+            <mat-label>التاريخ</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="startDate" required>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Time Selection -->
+          <div class="grid grid-cols-2 gap-4">
+            <mat-form-field appearance="outline">
+              <mat-label>وقت البدء</mat-label>
+              <mat-select formControlName="startTime" required>
+                @for(time of timeSlots; track time) {
+                  <mat-option [value]="time">{{ time }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>وقت الانتهاء</mat-label>
+              <mat-select formControlName="endTime" required>
+                @for(time of timeSlots; track time) {
+                  <mat-option [value]="time">{{ time }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </mat-tab>
+
+    <!-- Exams Tab -->
+    <mat-tab label="الإختبارات">
+      <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 gap-4 mt-4">
+          <!-- Exam Selection -->
+          <mat-form-field appearance="outline">
+            <mat-label>الاختبار</mat-label>
+            <mat-select formControlName="examId" required>
+              @for(exam of exams; track exam.id) {
+                <mat-option [value]="exam.id">
+                  {{ exam.title }} - {{ exam.course?.title }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Date Selection -->
+          <mat-form-field appearance="outline">
+            <mat-label>التاريخ</mat-label>
+            <input matInput [matDatepicker]="examPicker" formControlName="startDate" required>
+            <mat-datepicker-toggle matIconSuffix [for]="examPicker"></mat-datepicker-toggle>
+            <mat-datepicker #examPicker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Time Selection -->
+          <div class="grid grid-cols-2 gap-4">
+            <mat-form-field appearance="outline">
+              <mat-label>وقت البدء</mat-label>
+              <mat-select formControlName="startTime" required>
+                @for(time of timeSlots; track time) {
+                  <mat-option [value]="time">{{ time }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>وقت الانتهاء</mat-label>
+              <mat-select formControlName="endTime" required>
+                @for(time of timeSlots; track time) {
+                  <mat-option [value]="time">{{ time }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">إلغاء</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="selectedTabIndex === 0 ? sessionForm.invalid : examForm.invalid">
+    {{ isEditMode ? 'تحديث' : 'إضافة' }}
+  </button>
+</mat-dialog-actions>

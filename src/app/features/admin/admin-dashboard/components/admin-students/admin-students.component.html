@@ -1,0 +1,240 @@
+<div class="p-5 h-full">
+  <mat-tab-group>
+    <!-- Applications Tab -->
+    <mat-tab label="طلبات التسجيل">
+      <div class="py-5">
+        @if (loading) {
+        <div class="p-5">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        } @if (!loading && applications.length === 0) {
+        <div class="text-center py-10 text-gray-600 text-lg">
+          لا توجد طلبات تسجيل حالياً
+        </div>
+        } @if (!loading && applications.length > 0) {
+        <div class="flex flex-col gap-5 py-5">
+          @for (application of applications; track application.id) {
+          <mat-card
+            appearance="outlined"
+            class="!bg-white !shadow-md !my-5 !mx-32"
+          >
+            <mat-card-header class="mb-4">
+              <mat-card-title class="!text-xl !font-semibold">
+                {{ application?.user?.name || "غير معروف" }}
+              </mat-card-title>
+              <mat-card-subtitle class="text-gray-600">
+                {{ application?.path?.name || "غير معروف" }}
+              </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+              <div class="space-y-6">
+                <!-- Enrollment Details -->
+                <div>
+                  <h3
+                    class="text-lg font-medium text-blue-600 border-b border-gray-200 pb-2 mb-3"
+                  >
+                    معلومات التسجيل
+                  </h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm text-gray-600">نوع المسار :</span>
+                      <span class="font-medium">{{
+                        application?.path?.isHifd ? "حفظ" : "عام"
+                      }}</span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm text-gray-600">تاريخ التسجيل:</span>
+                      <span class="font-medium">{{
+                        application?.createdAt | date : "medium" : "-"
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Request Details -->
+                <div>
+                  <h3
+                    class="text-lg font-medium text-blue-600 border-b border-gray-200 pb-2 mb-3"
+                  >
+                    معلومات الطلب
+                  </h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm text-gray-600"
+                        >المستوى التعليمي:</span
+                      >
+                      <span class="font-medium">{{
+                        application?.educationLevel === "primary"
+                          ? "ابتدائي"
+                          : application?.educationLevel === "secondary"
+                          ? "إعدادي"
+                          : application?.educationLevel === "high"
+                          ? "ثانوي"
+                          : application?.educationLevel === "university"
+                          ? "جامعي"
+                          : application?.educationLevel === "other"
+                          ? "أخرى"
+                          : "غير معروف"
+                      }}</span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm text-gray-600">العمر:</span>
+                      <span class="font-medium">{{
+                        application?.age || "غير معروف"
+                      }}</span>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm text-gray-600">قدرة الحفظ:</span>
+                      <span class="font-medium">{{
+                        application?.memorizationCapability === "quarter"
+                          ? "ربع حزب"
+                          : application?.memorizationCapability === "half_hizb"
+                          ? "نصف حزب"
+                          : application?.memorizationCapability === "hizb"
+                          ? "حزب كامل"
+                          : application?.memorizationCapability === "two_hizb"
+                          ? "حزبان"
+                          : application?.memorizationCapability === "three_hizb"
+                          ? "ثلاثة أحزاب"
+                          : application?.memorizationCapability === "four_hizb"
+                          ? "أربعة أحزاب"
+                          : application?.memorizationCapability === "five_hizb"
+                          ? "خمسة أحزاب"
+                          : application?.memorizationCapability === "juz"
+                          ? "جزء كامل"
+                          : "-"
+                      }}</span>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm text-gray-600">الهدف:</span>
+                      <div class="max-h-32 overflow-y-auto border rounded p-2">
+                        <textarea
+                          disabled
+                          class="w-full h-full"
+                          [value]="application?.goal"
+                          id=""
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+
+            <mat-card-actions
+              class="p-4 flex justify-end gap-2 rtl:justify-start"
+            >
+              <button
+                mat-button
+                color="primary"
+                (click)="acceptApplication(application)"
+                class="flex items-center gap-1"
+              >
+                <mat-icon>check</mat-icon>
+                قبول
+              </button>
+              <button
+                mat-button
+                color="warn"
+                (click)="rejectApplication(application)"
+                class="flex items-center gap-1"
+              >
+                <mat-icon>close</mat-icon>
+                رفض
+              </button>
+            </mat-card-actions>
+          </mat-card>
+          }
+        </div>
+        }
+      </div>
+    </mat-tab>
+
+    <!-- Enrolled Students Tab -->
+    <mat-tab label="الطلاب المسجلين">
+      <div class="py-5">
+        @if (loading) {
+        <div class="p-5">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        } @if (!loading && enrolledStudents.length === 0) {
+        <div class="text-center py-10 text-gray-600 text-lg">
+          لا يوجد طلاب مسجلين حالياً
+        </div>
+        } @if (!loading && enrolledStudents.length > 0) {
+        <app-tabulator-table
+          [data]="enrolledStudents"
+          [columns]="enrollmentColumns"
+          [options]="{
+            layout: 'fitDataStretch',
+            pagination: true,
+            paginationSize: 10,
+            paginationSizeSelector: [10, 20, 50],
+            height: 'calc(100vh - 200px)',
+            textDirection: 'rtl',
+            locale: 'ar',
+            langs: {
+              ar: {
+                pagination: {
+                  first: 'الأول',
+                  first_title: 'الصفحة الأولى',
+                  last: 'الأخير',
+                  last_title: 'الصفحة الأخيرة',
+                  prev: 'السابق',
+                  prev_title: 'الصفحة السابقة',
+                  next: 'التالي',
+                  next_title: 'الصفحة التالية'
+                }
+              }
+            }
+          }"
+        ></app-tabulator-table>
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<!-- Rejection Dialog Template -->
+<ng-template #rejectionDialog>
+  <h2 mat-dialog-title>سبب الرفض</h2>
+  <mat-dialog-content>
+    <mat-form-field class="w-full">
+      <mat-label>الرجاء إدخال سبب الرفض</mat-label>
+      <textarea matInput [(ngModel)]="rejectionReason" rows="4"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>إلغاء</button>
+    <button mat-button color="warn" [mat-dialog-close]="rejectionReason">
+      تأكيد
+    </button>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- Aproving Dialog Template for hifd paths  -->
+<ng-template #circleDialog>
+  <h2 mat-dialog-title>اختر الحلقة</h2>
+  <mat-dialog-content>
+    <mat-form-field class="w-full">
+      <mat-label>الحلقة</mat-label>
+      <mat-select [(ngModel)]="selectedCircleId">
+        @for (circle of circles; track $index) {
+        <mat-option  [value]="circle.id">
+          {{ circle.title }}
+        </mat-option>
+
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>إلغاء</button>
+    <button mat-button color="warn" [mat-dialog-close]="circleDialog">
+      تأكيد
+    </button>
+  </mat-dialog-actions>
+</ng-template>

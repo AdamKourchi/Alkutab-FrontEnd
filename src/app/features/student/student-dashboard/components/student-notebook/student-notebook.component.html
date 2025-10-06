@@ -1,0 +1,41 @@
+<div class="flex flex-col h-full md:flex-row">
+  <!-- Left: Student Details -->
+  <div class="flex-1 p-3 md:p-6">
+    @if(!loading){
+    <ng-container>
+      @if(student) {
+
+      <ng-container>
+        <div class="mb-4 md:mb-6 flex flex-col md:flex-row items-start md:items-center justify-between">
+          <div class="almarai">
+            <h2 class="text-xl md:text-2xl font-bold">كراسة الطالب</h2>
+          </div>
+        </div>
+        <mat-card>
+          <mat-card-content>
+            <div class="overflow-x-auto">
+              <app-tabulator-table
+                [data]="wajibs"
+                [columns]="collums"
+                [options]="options"
+              ></app-tabulator-table>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+
+      }@else {
+      <ng-container>
+        <p class="text-gray-500 text-sm md:text-base">لا يوجد طلبة في هذه الحلقة.</p>
+      </ng-container>
+      }
+    </ng-container>
+    }@else {
+    <ng-template>
+      <div class="flex items-center justify-center h-full">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+    </ng-template>
+    }
+  </div>
+</div>

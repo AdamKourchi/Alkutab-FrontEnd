@@ -1,0 +1,51 @@
+<div class="flex justify-center items-center min-h-screen bg-gray-50 p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md space-y-4">
+      <h2 class="text-2xl font-semibold text-center">تعيين كلمة المرور</h2>
+  
+
+        <form [formGroup]="passwordForm" (ngSubmit)="submit()" class="space-y-4">
+  
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>كلمة المرور الجديدة</mat-label>
+            <input matInput type="password" formControlName="password" required>
+          
+          
+            @if(passwordForm.get('password')?.hasError('minlength')){
+              <mat-error>
+                  يجب أن تكون كلمة المرور 8 أحرف على الأقل.
+                </mat-error>
+            }
+  
+          </mat-form-field>
+    
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>تأكيد كلمة المرور</mat-label>
+            <input matInput type="password" formControlName="password_confirmation" required>
+
+
+            @if(passwordForm.get('password_confirmation')?.hasError('mismatch')){
+              <mat-error>
+                كلمتا المرور غير متطابقتين.
+              </mat-error>
+            }
+       
+
+
+          </mat-form-field>
+          
+    
+          @if(errorMessage){
+            <div class="text-red-600 text-sm">{{ errorMessage }}</div>
+          }
+          @if(successMessage){
+            <div class="text-green-600 text-sm">{{ successMessage }}</div>
+          }
+    
+          <button mat-flat-button color="primary" class="w-full" [disabled]="loading || passwordForm.invalid">
+            {{ loading ? 'جارٍ الإرسال...' : 'تعيين كلمة المرور' }}
+          </button>
+        </form>
+      
+ 
+    </div>
+  </div>

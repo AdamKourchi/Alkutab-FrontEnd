@@ -1,0 +1,28 @@
+#register-image{
+    background-image: url('/assets/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
+    background-image: url('/assets/images/background.jpg');
+}
+
+
+.register-link {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+  
+    a {
+      color: #3f51b5;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  

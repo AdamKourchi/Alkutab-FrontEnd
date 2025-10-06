@@ -1,0 +1,105 @@
+<div class="container mx-auto p-4">
+  <!-- Welcome Section -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">مرحباً بك في لوحة التحكم</h1>
+    <p class="text-gray-600">نظرة عامة على النظام</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+    <!-- Students Stats -->
+    <mat-card class="!bg-white">
+      <mat-card-content class="p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 mb-1">إجمالي الطلاب</p>
+            <h2 class="text-3xl font-bold">{{ stats.totalStudents }}</h2>
+            <p class="text-sm text-green-600 mt-1">{{ stats.activeStudents }} طالب نشط</p>
+          </div>
+          <mat-icon class="text-blue-500 text-4xl">school</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Teachers Stats -->
+    <mat-card class="!bg-white">
+      <mat-card-content class="p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 mb-1">إجمالي المعلمين</p>
+            <h2 class="text-3xl font-bold">{{ stats.totalTeachers }}</h2>
+            <p class="text-sm text-green-600 mt-1">{{ stats.activeTeachers }} معلم نشط</p>
+          </div>
+          <mat-icon class="text-purple-500 text-4xl">person</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Content Stats -->
+    <mat-card class="!bg-white">
+      <mat-card-content class="p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 mb-1">المحتوى التعليمي</p>
+            <div class="space-y-1">
+              <p class="text-sm">{{ stats.totalPaths }} مسار</p>
+              <p class="text-sm">{{ stats.totalLevels }} مستوى</p>
+              <p class="text-sm">{{ stats.totalCourses }} دورة</p>
+            </div>
+          </div>
+          <mat-icon class="text-green-500 text-4xl">menu_book</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Main Content -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Paths Progress -->
+    <mat-card class="!bg-white">
+      <mat-card-header>
+        <mat-card-title>تقدم المسارات</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="space-y-4 mt-4">
+          @for (path of pathsProgress; track path.name) {
+            <div>
+              <div class="flex justify-between mb-1">
+                <span>{{ path.name }}</span>
+                <span class="text-sm text-gray-600">{{ path.students }} طالب</span>
+              </div>
+              <mat-progress-bar mode="determinate" [value]="path.progress" class="h-2"></mat-progress-bar>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Recent Activities -->
+    <mat-card class="!bg-white">
+      <mat-card-header>
+        <mat-card-title>النشاطات الأخيرة</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          @for (activity of recentActivities; track activity.time) {
+            <mat-list-item>
+              <div class="flex items-center w-full">
+                <mat-icon class="mr-2" [class.text-blue-500]="activity.type === 'student'" [class.text-purple-500]="activity.type === 'teacher'">
+                  {{ activity.type === 'student' ? 'school' : 'person' }}
+                </mat-icon>
+                <div class="flex-1">
+                  <p class="mb-0">{{ activity.name }} {{ activity.action }}</p>
+                  <p class="text-sm text-gray-500 mb-0">{{ activity.time }}</p>
+                </div>
+              </div>
+            </mat-list-item>
+            @if (!$last) {
+              <mat-divider></mat-divider>
+            }
+          }
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+.backgroundImage{
+    background-image: url('/assets/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+.laptopBackground{
+    background-image: url('/assets/images/laptop.png');
+    background-size:contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    
+}

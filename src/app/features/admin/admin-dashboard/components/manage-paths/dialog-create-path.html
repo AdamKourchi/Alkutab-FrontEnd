@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>إضافة مسار جديد</h2>
+<mat-dialog-content class="mat-typography">
+  <form
+    [formGroup]="createPathForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-5"
+  >
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>اسم المسار</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="أدخل اسم المسار"
+        required
+      />
+      @if(createPathForm.get('name')?.hasError('required')){
+      <mat-error>اسم المسار مطلوب</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>الوصف</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="أدخل وصف المسار"
+        required
+      ></textarea>
+      @if(createPathForm.get('description')?.hasError('required')){
+      <mat-error>الوصف مطلوب</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>عنوان الدبلوم</mat-label>
+      <input
+        matInput
+        formControlName="diploma_title"
+        placeholder="أدخل عنوان الدبلوم"
+        required
+      />
+      @if(createPathForm.get('diploma_title')?.hasError('required')){
+      <mat-error>عنوان الدبلوم مطلوب</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="is_active">نشط</mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="is_hifd">مسار تحفيظ القرآن</mat-slide-toggle>
+
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>إلغاء</button>
+      <button mat-button type="submit" [disabled]="createPathForm.invalid">
+        حفظ
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

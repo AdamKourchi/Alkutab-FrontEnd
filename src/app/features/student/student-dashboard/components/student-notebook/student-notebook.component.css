@@ -1,0 +1,15 @@
+@media (max-width: 600px) {
+  ::ng-deep .tabulator-paginator .tabulator-page-size,
+  ::ng-deep .tabulator-paginator label,
+  ::ng-deep .tabulator-paginator button[title="الصفحة الأولى"],
+  ::ng-deep .tabulator-paginator button[title="الصفحة الأخيرة"],
+  ::ng-deep .tabulator-paginator button[title="First Page"],
+  ::ng-deep .tabulator-paginator button[title="Last Page"] {
+    display: none !important;
+  }
+}
+
+/* Optionally, add some spacing for collapsed rows */
+.tabulator-row .tabulator-responsive-collapse {
+  padding: 8px 0;
+}

@@ -1,0 +1,179 @@
+@if(loading){
+  <div class="flex justify-center items-center h-screen">
+    <mat-progress-spinner
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+}@else {
+
+
+<mat-drawer-container>
+  <mat-drawer #drawer mode="side" position="end" opened="true">
+    <mat-card appearance="outlined" class="!bg-white !shadow-md !my-5 !ml-5">
+      <mat-card-header>
+        <mat-card-title class="!flex !justify-between !items-center">
+          <p class="almarai text-xl">الدورات :</p>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-action-list>
+          @for(course of courses ;track course.id){
+          <button mat-list-item (click)="selectCourse(course)">
+            {{ course.title }}
+          </button>
+
+          }@empty {
+          <p class="almarai text-sm">لا توجد دورات متاحة</p>
+          }
+        </mat-action-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer>
+
+  <div class="m-5">
+    <mat-card appearance="outlined" class="!bg-white !shadow-md">
+      @if(selectedCourse){
+
+      <mat-card-content>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-800">الدورة</h2>
+          <div class="flex gap-4 justify-end">
+            <button
+              type="button"
+              mat-raised-button
+              color="primary"
+              (click)="openDialog()"
+            >
+              <mat-icon>add</mat-icon>
+              إضافة دورة
+            </button>
+
+            <button type="button" mat-button (click)="drawer.toggle()">
+              لائحة الدورات
+            </button>
+          </div>
+        </div>
+
+        <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+          <!-- Main Path Information -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>المسار</mat-label>
+              <input matInput formControlName="path" required readonly />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>المستوى</mat-label>
+              <input matInput formControlName="level" required readonly />
+            </mat-form-field>
+
+            <input type="hidden" formControlName="levelId" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>عنوان الدورة</mat-label>
+              <input matInput formControlName="title" required />
+              @if (courseForm.get('title')?.hasError('required')) {
+              <mat-error> هذا الحقل مطلوب </mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>الأستاذ</mat-label>
+              <mat-select formControlName="teacher">
+                <mat-option [value]="null">
+                  <em>اختر أستاذًا</em>
+                </mat-option>
+
+                @for (teacher of teachers; track $index) {
+                <mat-option [value]="teacher.id">
+                  {{ teacher.name }}
+                </mat-option>
+
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="w-full mb-6">
+            <mat-label>الوصف</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="4"
+            ></textarea>
+            @if (courseForm.get('description')?.hasError('required')) {
+            <mat-error> هذا الحقل مطلوب </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Form Actions -->
+          <div class="mt-8 flex justify-center items-center">
+            <div class="w-1/4 flex flex-col gap-2">
+              <button type="submit" mat-flat-button color="primary">
+                <mat-icon>save</mat-icon>
+                حفظ الدورة
+              </button>
+              <button
+                type="button"
+                mat-raised-button
+                class="!bg-red-500 !text-white"
+                (click)="openDeleteDialog()"
+              >
+                <mat-icon>delete</mat-icon>
+                حذف الدورة
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+      }@else {
+      <mat-card-header class="!flex !justify-between">
+        <mat-card-title>
+          <p class="almarai text-xl mb-2">إدارة الدورات :</p>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+          <p class="almarai text-sm mb-2">
+            اختر الدورة من القائمة الجانبية لعرض تفاصيله وتعديله أو قم بإضافة
+            الدورة جديد.
+          </p>
+        </mat-card-subtitle>
+
+        <div class="flex gap-4 justify-end">
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="openDialog()"
+          >
+            <mat-icon>add</mat-icon>
+            إضافة دورة
+          </button>
+
+          <button type="button" mat-button (click)="drawer.toggle()">
+            لائحة الدورات
+          </button>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content> </mat-card-content>
+      }
+    </mat-card>
+  </div>
+
+
+</mat-drawer-container>
+
+
+
+
+
+}
+
+
+
+

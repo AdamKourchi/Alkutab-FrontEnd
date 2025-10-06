@@ -1,0 +1,188 @@
+<div class="flex justify-between items-center mx-5">
+    <h2 mat-dialog-title>انشئ إنشاء اختبار جديد</h2>
+  
+    <div class="flex gap-2">
+      <button mat-button mat-dialog-close type="button">إلغاء</button>
+      <button mat-flat-button color="primary" [disabled]="!examForm.valid" (click)="onSubmit()">حفظ</button>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  
+  <form [formGroup]="examForm" class="flex flex-col gap-4 mx-24 lg:mx-96 mt-5">
+    <!-- Basic Exam Information -->
+    <mat-card>
+      <mat-card-content>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field>
+            <mat-label>عنوان الاختبار</mat-label>
+            <input matInput formControlName="title" required />
+          </mat-form-field>
+  
+          <mat-form-field>
+            <mat-label>نوع الاختبار</mat-label>
+            <mat-select formControlName="examType">
+              @for(type of examTypes; track type.value) {
+              <mat-option [value]="type.value">
+                {{ type.label }}
+              </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+        <mat-form-field class="w-full">
+          <mat-label>وصف الاختبار</mat-label>
+          <textarea matInput formControlName="description" rows="3"></textarea>
+        </mat-form-field>
+  
+        <mat-checkbox formControlName="isFinal" class="mt-2">
+          هذا اختبار نهائي (يحدد انتقال الطالب للمستوى التالي)
+        </mat-checkbox>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Written Exam Section -->
+    @if(examForm.get('examType')?.value === 'written') {
+    <ng-container formGroupName="writtenExamDetails">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!mb-2">تفاصيل الاختبار التحريري</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <mat-form-field>
+              <mat-label>مدة الاختبار (بالدقائق)</mat-label>
+              <input matInput type="number" formControlName="duration" required />
+            </mat-form-field>
+  
+          </div>
+  
+          <!-- Questions Section -->
+          <div formArrayName="questions">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold almarai">الأسئلة</h3>
+              <button mat-flat-button color="accent" (click)="addQuestion()">
+                <mat-icon>add</mat-icon>
+                إضافة سؤال
+              </button>
+            </div>
+  
+            @for(question of questions.controls; track $index) {
+            <div [formGroupName]="$index" class="border p-4 rounded-lg mb-4">
+              <div class="flex justify-between items-start mb-4">
+                <h4 class="text-md font-medium almarai">سؤال {{ $index + 1 }}</h4>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="removeQuestion($index)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+  
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <mat-form-field class="w-full">
+                  <mat-label>نص السؤال</mat-label>
+                  <textarea
+                    matInput
+                    formControlName="question"
+                    required
+                  ></textarea>
+                </mat-form-field>
+  
+                <div class="flex gap-4">
+                  <mat-form-field>
+                    <mat-label>نوع السؤال</mat-label>
+                    <mat-select formControlName="type">
+                      @for(type of questionTypes; track type.value) {
+                      <mat-option [value]="type.value">
+                        {{ type.label }}
+                      </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+  
+                  <mat-form-field>
+                    <mat-label>الدرجة</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="points"
+                      required
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+  
+              <!-- Multiple Choice Options -->
+              @if(question.get('type')?.value === 'multiple_choice') {
+              <div [formArrayName]="'options'" class="mt-4">
+                @for(option of getOptionsForQuestion($index).controls; track
+                $index) {
+                <div class="flex gap-2 items-center mb-2">
+                  <mat-form-field class="w-full">
+                    <mat-label>خيار {{ $index + 1 }}</mat-label>
+                    <input matInput [formControlName]="$index" required />
+                  </mat-form-field>
+                  <mat-radio-button
+                    [value]="$index"
+                    (change)="question.get('correctAnswer')?.setValue($index)"
+                  >
+                    الإجابة الصحيحة
+                  </mat-radio-button>
+                </div>
+                }
+              </div>
+              }
+  
+              <!-- Short Answer -->
+              @if(question.get('type')?.value === 'short_answer') {
+              <mat-form-field class="w-full mt-4">
+                <mat-label>الإجابة الصحيحة</mat-label>
+                <input matInput formControlName="correctAnswer" required />
+              </mat-form-field>
+              }
+            </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+    }
+  
+    <!-- Oral Exam Section -->
+    @if(examForm.get('examType')?.value === 'oral') {
+    <ng-container formGroupName="oralExamDetails">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>تفاصيل الاختبار الشفهي</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="grid grid-cols-1 gap-4">
+            <mat-form-field>
+              <mat-label>مدة المقابلة لكل طالب (بالدقائق)</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="studentDuration"
+                required
+              />
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-label>تعليمات للطالب</mat-label>
+              <textarea
+                matInput
+                formControlName="instructions"
+                rows="4"
+                required
+              ></textarea>
+            </mat-form-field>
+  
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+    }
+  </form>
+  

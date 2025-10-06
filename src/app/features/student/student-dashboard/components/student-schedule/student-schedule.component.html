@@ -1,0 +1,35 @@
+<mat-drawer-container>
+  <div class="my-2 mx-2 sm:my-5 sm:mx-5">
+    <!-- Calendar -->
+    <mat-card appearance="outlined" class="!bg-white !shadow-md !p-2 sm:!p-5 !m-2 sm:!m-5 w-full">
+      <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+        <h1 class="text-lg sm:text-xl font-bold almarai text-center sm:text-right">
+          {{ path.name }} : {{ circle.title }}
+        </h1>
+        <h1 class="text-lg sm:text-xl font-bold almarai text-center sm:text-right">جدول الحصص الدراسية</h1>
+      </div>
+
+      <div *ngIf="loading" class="flex justify-center p-6">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </div>
+
+      <div class="w-full overflow-x-auto">
+        <full-calendar
+          #calendar
+          [options]="calendarOptions"
+          class="w-full min-w-[320px] max-w-full"
+          *ngIf="!loading"
+        >
+        </full-calendar>
+      </div>
+
+      <div class="mt-4 text-xs sm:text-sm text-gray-500 p-2 sm:p-3 bg-blue-50 rounded">
+        <h3 class="font-bold mb-2">تعليمات:</h3>
+        <ul class="mr-4 space-y-1">
+          <li>• يمكنك عرض الحصص الدراسية الخاصة بك</li>
+          <li>• استخدم لوحة إدارة العرض للتحكم في ما تراه في التقويم</li>
+        </ul>
+      </div>
+    </mat-card>
+  </div>
+</mat-drawer-container>

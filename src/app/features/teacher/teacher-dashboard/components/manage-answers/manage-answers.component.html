@@ -1,0 +1,60 @@
+<div class="flex justify-between items-center mx-5">
+  <h2 mat-dialog-title>تصحيح الأسئلة :</h2>
+  <div class="flex gap-2">
+    <button mat-button mat-dialog-close type="button">إلغاء</button>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+
+<div class="grid grid-cols-5">
+  <mat-card class="!bg-white mx-5 my-5 col-span-1">
+    <mat-card-content>
+      <mat-nav-list>
+        @for (student of students; track student.id) {
+       
+
+          <a
+            class="flex justify-center items-center py-2 gap-2 hover:bg-[#292a2c1a] hover:rounded-2xl cursor-pointer"
+            [class.bg-gray-200]="selectedStudent?.id === student.id"
+            (click)="selectStudent(student)"
+          >
+
+          @if(haveTeacherComment(student)){
+            <mat-icon style="color: green;" >check</mat-icon>
+          }
+
+            <mat-icon>account_circle</mat-icon>
+            <span>{{ student.name }}</span>
+          </a>
+          <mat-divider class="!mx-5"></mat-divider>
+        }
+      </mat-nav-list>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="!bg-white col-span-4 my-5 me-5">
+
+    <mat-card-content *ngIf="selectedAnswer">
+      <div class="w-full">
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label>الجواب</mat-label>
+          <textarea matInput [value]="selectedAnswer.answerText" readonly></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="mt-4">
+        <mat-form-field class="w-full" appearance="fill">
+          <mat-label>تعليق الأستاذ</mat-label>
+          <textarea matInput [(ngModel)]="selectedAnswer.teacherComment"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="mt-4 flex justify-end">
+        <button mat-flat-button color="primary" (click)="submitCorrection()">حفظ التصحيح</button>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+</div>

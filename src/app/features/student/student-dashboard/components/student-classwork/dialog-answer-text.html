@@ -1,0 +1,74 @@
+<div class="flex justify-between items-center mx-5">
+  <h2 mat-dialog-title>أجب على السؤال :</h2>
+  <div class="flex gap-2">
+    <button mat-button mat-dialog-close type="button">إلغاء</button>
+    <button
+      mat-flat-button
+      color="accent"
+      type="submit"
+      (click)="onSubmit()"
+      [disabled]="textForm.invalid"
+    >
+      حفظ
+    </button>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+<form
+  enctype="multipart/form-data"
+  class="flex flex-col gap-5"
+  [formGroup]="textForm"
+>
+  <mat-card appearance="outlined" class="!bg-white mx-32 my-5">
+    <mat-card-content>
+      <div class="grid grid-cols-3 gap-4">
+        <mat-form-field appearance="fill" class="col-span-2">
+          <mat-label>السؤال</mat-label>
+          <input matInput readonly value="{{question.questionText}}" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="col-span-1">
+          <mat-label>موعد التسليم</mat-label>
+          <input
+            matInput
+            readonly
+            value="{{question.dueDate | date:'dd/MM/yyyy':'':'ar' }}"
+          />
+        </mat-form-field>
+
+        @if(question.instructions){
+        <div class="col-span-2 border-b-1 rounded p-2 bg-[#dfe4d7]">
+          <mat-label class="almarai">التعليمات</mat-label>
+          <div
+            class="mx-3"
+            matInput
+            readonly
+            [innerHTML]="question.instructions"
+          ></div>
+        </div>
+
+        } @if(question.attachment){
+        <div class="flex justify-center items-center">
+          <button mat-button (click)="downloadFile(question.attachment)">
+            <mat-icon> download </mat-icon>
+            ملف مرفق
+          </button>
+        </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined" class="!bg-white mx-32 my-5">
+    <mat-card-content>
+      <p class="almarai my-2">قم بصياغة الجواب :</p>
+      <div class="grid grid-cols-3 gap-4">
+        <mat-form-field class="col-span-3">
+          <mat-label>الجواب :</mat-label>
+          <textarea formControlName="answer" matInput autofocus></textarea>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>

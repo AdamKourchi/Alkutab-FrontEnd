@@ -1,0 +1,140 @@
+<mat-drawer-container class="!h-full">
+  <mat-drawer #drawer mode="side" position="end" opened="true">
+    <mat-card appearance="outlined" class="!bg-white !shadow-md !my-5 !ml-5">
+      <mat-card-header>
+        <mat-card-title class="!flex !justify-between !items-center">
+          <p class="almarai text-xl">الأساتذة :</p>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-action-list>
+          @for(teacher of teachers ;track $index){
+          <button mat-list-item (click)="selectTeacher(teacher)">
+            {{ teacher.name }}
+          </button>
+
+          }@empty {
+          <p class="almarai text-sm">لا يوجد أساتذة متاحون.</p>
+          }
+        </mat-action-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer>
+
+  <div class="m-5">
+    <mat-card appearance="outlined" class="!bg-white !shadow-md">
+      @if(selectedTeacher){
+
+      <mat-card-content>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-800">المعلومات الشخصية</h2>
+        
+          <div class="flex gap-4 justify-end">
+            <button
+              type="button"
+              mat-raised-button
+              color="primary"
+              (click)="openCreateDialog()"
+            >
+              <mat-icon>add</mat-icon>
+              دعوة أستاذ
+            </button>
+
+            <button type="button" mat-button (click)="drawer.toggle()">
+              لائحة الأساتذة
+            </button>
+          </div>
+        </div>
+
+        <form [formGroup]="teacherForm">
+          <!-- Main Path Information -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>الإسم الكامل</mat-label>
+              <input readonly matInput formControlName="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>الرقم الهاتفي</mat-label>
+              <input readonly matInput formControlName="phone" />
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>البريد الإلكتروني</mat-label>
+              <input readonly matInput formControlName="email" />
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>الحالة</mat-label>
+              @if(selectedTeacher.inviteTokenExpiration &&
+              selectedTeacher.inviteTokenExpiration > today){
+    
+                <input readonly matInput value="في انتظار قبول الدعوة ..."/>
+    
+              }@else if ( selectedTeacher.inviteTokenExpiration &&
+              selectedTeacher.inviteTokenExpiration < today ) {
+                <input readonly matInput value="انتهت صلاحية الدعوة."/>
+              }@else {
+                <input readonly matInput value="مسجل."/>
+              }
+            </mat-form-field>
+
+
+          </div>
+
+          <!-- Courses Section -->
+
+          <!-- Form Actions -->
+          <div class="mt-8 flex justify-center items-center">
+            <div class="w-1/4 flex flex-col gap-2">
+              <button
+                type="button"
+                mat-raised-button
+                class="!bg-red-500 !text-white"
+                (click)="openDeleteDialog()"
+              >
+                <mat-icon>delete</mat-icon>
+                حذف الأستاذ
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+      }@else {
+      <mat-card-header class="!flex !justify-between">
+        <mat-card-title>
+          <p class="almarai text-xl mb-2">إدارة الأساتذة :</p>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+          <p class="almarai text-sm mb-2">
+            اختر أستاذ من القائمة الجانبية لعرض تفاصيله وتعديله أو قم بدعوة
+            أستاذ جديد.
+          </p>
+        </mat-card-subtitle>
+
+        <div class="flex gap-4 justify-end">
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="openCreateDialog()"
+          >
+            <mat-icon>add</mat-icon>
+            دعوة أستاذ
+          </button>
+
+          <button type="button" mat-button (click)="drawer.toggle()">
+            لائحة الأساتذة
+          </button>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content> </mat-card-content>
+      }
+    </mat-card>
+  </div>
+</mat-drawer-container>

@@ -1,0 +1,129 @@
+<mat-drawer-container>
+
+  <div class="my-5 mx-5">
+    <!-- Calendar -->
+    <mat-card appearance="outlined" class="!bg-white !shadow-md !p-5 !m-5">
+      <div class="flex justify-between items-center mb-4">
+        <button type="button" mat-button (click)="drawer.toggle()">
+          إدارة العرض
+        </button>
+        <h1 class="text-xl font-bold almarai">جدول الحصص الدراسية</h1>
+        <div class="flex gap-2">
+          <button mat-flat-button color="accent" (click)="saveCalendarEvents()">
+            <mat-icon>save</mat-icon>
+            حفظ الجدول
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="loading" class="flex justify-center p-6">
+        <mat-spinner [diameter]="40"></mat-spinner>
+      </div>
+
+      <full-calendar
+        #calendar
+        [options]="calendarOptions"
+        class="w-full h-full"
+        *ngIf="!loading"
+      >
+      </full-calendar>
+
+      <div class="mt-4 text-sm text-gray-500 p-3 bg-blue-50 rounded">
+        <h3 class="font-bold mb-2">تعليمات:</h3>
+        <ul class="mr-4 space-y-1">
+          <li>• انقر على فترة زمنية لإضافة حصة جديدة</li>
+          <li>• انقر على حصة موجودة لتعديلها</li>
+          <li>• انقر بالزر الأيمن على الحصة لحذفها</li>
+          <li>• اسحب الحصة لتغيير موعدها</li>
+          <li>• اسحب حدود الحصة لتغيير مدتها</li>
+        </ul>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-drawer #drawer mode="side" position="start" opened="false">
+    <!-- Visibility Management Panel -->
+    <mat-card appearance="outlined" class="!bg-white !shadow-md !p-5 !mt-5 !mr-5">
+      <mat-card-header>
+        <mat-card-title class="text-lg font-bold almarai mb-4"
+          >إدارة العرض</mat-card-title
+        >
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-accordion class="example-headers-align" multi>
+          @for(path of displayedPaths;track $index){
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="flex items-center gap-2">
+                <mat-checkbox
+                  [(ngModel)]="path.isVisible"
+                  (ngModelChange)="updateCalendarEvents()"
+                >
+                  {{ path.name }}
+                </mat-checkbox>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <!-- Levels -->
+            <div class="pr-4 space-y-4">
+              <div
+                *ngFor="let level of path.levels"
+                class="border-r-2 border-gray-200 pr-4"
+              >
+                <div class="flex items-center gap-2 mb-2">
+                  <mat-checkbox
+                    [(ngModel)]="level.isVisible"
+                    (ngModelChange)="updateCalendarEvents()"
+                  >
+                    {{ level.name }}
+                  </mat-checkbox>
+                </div>
+
+                <!-- Sessions -->
+                <div class="pr-4 space-y-2">
+                  <div
+                    *ngFor="let session of level.sessions"
+                    class="flex items-center gap-2"
+                  >
+                    <mat-checkbox
+                      [(ngModel)]="session.isVisible"
+                      (ngModelChange)="updateCalendarEvents()"
+                    >
+                      {{ session.title }}
+                    </mat-checkbox>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Circles -->
+            <div class="pr-4 space-y-4">
+              <div
+                *ngFor="let circle of path.circles"
+                class="border-r-2 border-gray-200 pr-4"
+              >
+                <div class="flex items-center gap-2 mb-2">
+                  <mat-checkbox
+                    [(ngModel)]="circle.isVisible"
+                    (ngModelChange)="updateCalendarEvents()"
+                  >
+                    {{ circle.name }}
+                  </mat-checkbox>
+                </div>
+
+      
+              </div>
+            </div>
+
+
+            
+          </mat-expansion-panel>
+          }
+        </mat-accordion>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer>
+
+</mat-drawer-container>

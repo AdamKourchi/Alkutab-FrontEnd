@@ -1,0 +1,12 @@
+#card {
+    background-image: url("/assets/images/teacher/card-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    position: relative;
+  }
+  
+  mat-sidenav {
+  width: 100px;
+}

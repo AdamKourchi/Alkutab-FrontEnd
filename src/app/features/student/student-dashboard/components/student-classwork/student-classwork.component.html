@@ -1,0 +1,141 @@
+@if(loading){
+
+<div class="flex justify-center items-center h-100">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+
+}@else{
+<div class="my-10 mx-56">
+  <p class="almarai">الواجبات المنشورة</p>
+</div>
+
+<div class="flex justify-center items-center mx-56">
+  <mat-accordion class="w-full">
+    @for(question of questions;track $index){ @if(question.dueDate &&
+    question.dueDate > today && question.questionType =="text"){
+    <ng-container>
+      <mat-expansion-panel hideToggle class="!bg-white">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ question.questionText }}
+          </mat-panel-title>
+
+          @if(question.id | hasAnswered : student.answers){
+          <mat-icon style="color: green">check_circle</mat-icon>
+
+          }@else{
+          <p class="text-sm">
+            آخر أجل : {{ question.dueDate | date : "dd/MM/yyyy" : "" : "ar" }}
+          </p>
+          }
+        </mat-expansion-panel-header>
+        <mat-divider class="!my-2 !w-full"></mat-divider>
+
+        @if(question.id | hasAnswered : student.answers){
+        <p class="font-bold" >جوابك :</p>
+        <p class="flex items-center">
+          <mat-icon> arrow_left </mat-icon>
+          {{ getAnswerByQuestionId(question.id).answer }}
+        </p>
+
+
+@if(getAnswerByQuestionId(question.id).teacher_comment){
+  <mat-divider class="!my-2"></mat-divider>
+  <p class="font-bold">تعليق الأستاذ :</p>
+  <p class="flex items-center">
+    <mat-icon> arrow_left </mat-icon>
+    {{ getAnswerByQuestionId(question.id).teacher_comment }}
+  </p>
+}
+
+
+
+        }@else {
+        <button mat-button (click)="openTextDialog(question)">
+          الإجابة على السؤال
+        </button>
+
+        }
+      </mat-expansion-panel>
+    </ng-container>
+    }@else if(question.dueDate && question.dueDate > today &&
+    question.questionType =="mc") {
+    <p>Options</p>
+    } }@empty{
+
+    <div
+      class="flex justify-center items-center border border-gray-500 rounded"
+    >
+      <p
+        class="text-gray-500 almarai flex justify-center items-center p-5 gap-5"
+      >
+        <mat-icon> info </mat-icon>
+        هاهنا تجد الواجبات التي لم ينقضِ وقتها بعد.
+      </p>
+    </div>
+    }
+  </mat-accordion>
+</div>
+
+<div class="my-10 mx-56">
+  <p class="almarai">الواجبات القديمة</p>
+</div>
+
+<div class="flex justify-center items-center mx-56">
+  <mat-accordion class="w-full">
+    @for(question of questions;track $index){
+       @if(question.dueDate &&  question.dueDate < today){
+
+    <ng-container>
+      <mat-expansion-panel hideToggle class="!bg-white">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ question.questionText }}
+          </mat-panel-title>
+
+          @if(question.id | hasAnswered : student.answers){
+          <mat-icon style="color: green">check_circle</mat-icon>
+
+          }@else {
+          <p class="text-sm">
+            آخر أجل : {{ question.dueDate | date : "dd/MM/yyyy" : "" : "ar" }}
+          </p>
+
+          }
+        </mat-expansion-panel-header>
+        <mat-divider class="!my-2 !w-full"></mat-divider>
+
+        @if(question.id | hasAnswered : student.answers){
+        <p>جوابك :</p>
+        <p class="flex items-center">
+          <mat-icon> arrow_left </mat-icon>
+          {{ getAnswerByQuestionId(question.id) }}
+        </p>
+
+        }@else {
+        <p>لم يتم الإجابة على هذا السؤل.</p>
+
+        }
+      </mat-expansion-panel>
+    </ng-container>
+
+    } }@empty{
+
+    <div
+      class="flex justify-center items-center border border-gray-500 rounded"
+    >
+      <p
+        class="text-gray-500 almarai flex justify-center items-center p-5 gap-5"
+      >
+        <mat-icon> info </mat-icon>
+        وهنا تجد الواجبات التي انقضى وقتها.
+      </p>
+    </div>
+    }
+  </mat-accordion>
+</div>
+
+}

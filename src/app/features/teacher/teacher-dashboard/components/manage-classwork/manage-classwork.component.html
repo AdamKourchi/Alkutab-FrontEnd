@@ -1,0 +1,193 @@
+<div class="mx-32 my-5 gap-2 flex">
+  <button mat-flat-button [matMenuTriggerFor]="menu">
+    <mat-icon> add </mat-icon>
+    أنشئ واجبا
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="openMCDialog()">
+      <mat-icon> check_box </mat-icon>
+      اختيارات متعددة
+    </button>
+    <button mat-menu-item (click)="openTextDialog()">
+      <mat-icon> edit_note </mat-icon>
+      سؤال مقالي
+    </button>
+  </mat-menu>
+</div>
+
+@if(loading){
+<div class="flex justify-center items-center h-100">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+}@else{
+<div class="my-10 mx-56">
+  <p class="text-center almarai">الواجبات المنشورة</p>
+</div>
+
+<div class="flex justify-center items-center mx-56">
+  <mat-accordion class="w-full">
+    @for(question of questions;track $index){ @if(question.dueDate &&
+    question.dueDate > today) {
+
+    <ng-container>
+      <mat-expansion-panel hideToggle class="!bg-white">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ question.questionText }}
+          </mat-panel-title>
+          <div>
+            <button mat-icon-button [matMenuTriggerFor]="menuPanel">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menuPanel="matMenu">
+              <button mat-menu-item (click)="deleteQuestion(question.id)">
+                <mat-icon> delete </mat-icon>
+                حذف الواجب
+              </button>
+            </mat-menu>
+          </div>
+        </mat-expansion-panel-header>
+
+        <div class="details flex justify-between items-center px-5">
+          <div>
+            <p class="text-sm underline">
+              آخر أجل : {{ question.dueDate | date : "dd/MM/yyyy" : "" : "ar" }}
+            </p>
+
+            @if(question.instructions){
+            <li
+              class="text-sm text-gray-600"
+              [innerHTML]="question.instructions"
+            ></li>
+            }
+          </div>
+
+          @if(question.attachment){
+          <div>
+            <button mat-button (click)="downloadFile(question.attachment)">
+              <mat-icon> download </mat-icon>
+              ملف مرفق
+            </button>
+          </div>
+          }
+        </div>
+        <mat-divider class="!mt-5"></mat-divider>
+        <div class="p-5 flex justify-between items-center">
+
+          <div class="flex gap-5">
+
+            <div class="flex justify-end flex-col">
+              <p class="text-lg">{{ question.answers.length }}</p>
+              <p class="text-xs" > جواب</p>
+            </div>
+
+            <mat-divider [vertical]="true"></mat-divider>
+
+            <div class="flex justify-end flex-col">
+              <p class="text-lg">{{ students.length }}</p>
+              <p class="text-xs" >طالب</p>
+            </div>
+
+          </div>
+
+          <button mat-stroked-button (click)="openCorrectionDialog(question.id)" >
+            <mat-icon>rule</mat-icon>
+            الأجوبة
+          </button>
+
+        </div>
+      </mat-expansion-panel>
+    </ng-container>
+    } }@empty{
+
+    <div
+      class="flex justify-center items-center border border-gray-500 rounded"
+    >
+      <p
+        class="text-gray-500 almarai flex justify-center items-center p-5 gap-5"
+      >
+        <mat-icon> info </mat-icon>
+        هاهنا تجد الواجبات التي لم ينقضِ وقتها بعد.
+      </p>
+    </div>
+    }
+  </mat-accordion>
+</div>
+
+<div class="my-10 mx-56">
+  <p class="text-center almarai">الواجبات القديمة</p>
+</div>
+
+<div class="flex justify-center items-center mx-56">
+  <mat-accordion class="w-full">
+    @for(question of questions;track $index){ @if(question.dueDate &&
+    question.dueDate < today){
+
+    <ng-container>
+      <mat-expansion-panel hideToggle class="!bg-white">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ question.questionText }}
+          </mat-panel-title>
+
+          <div>
+            <button mat-icon-button [matMenuTriggerFor]="menuPanel2">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menuPanel2="matMenu">
+              <button mat-menu-item (click)="deleteQuestion(question.id)">
+                <mat-icon> delete </mat-icon>
+                حذف الواجب
+              </button>
+            </mat-menu>
+          </div>
+        </mat-expansion-panel-header>
+
+        <div class="details flex justify-between items-center">
+          <div>
+            <p class="text-sm underline">
+              آخر أجل : {{ question.dueDate | date : "dd/MM/yyyy" : "" : "ar" }}
+            </p>
+
+            @if(question.instructions){
+            <li
+              class="text-sm text-gray-600"
+              [innerHTML]="question.instructions"
+            ></li>
+            }
+          </div>
+          @if(question.attachment){
+          <div>
+            <button
+              mat-stroked-button
+              (click)="downloadFile(question.attachment)"
+            >
+              <mat-icon> download </mat-icon>
+              ملف مرفق
+            </button>
+          </div>
+          }
+        </div>
+      </mat-expansion-panel>
+    </ng-container>
+
+    } }@empty{
+
+    <div
+      class="flex justify-center items-center border border-gray-500 rounded"
+    >
+      <p
+        class="text-gray-500 almarai flex justify-center items-center p-5 gap-5"
+      >
+        <mat-icon> info </mat-icon>
+        وهنا تجد الواجبات التي انقضى وقتها.
+      </p>
+    </div>
+    }
+  </mat-accordion>
+</div>
+
+}

@@ -1,0 +1,72 @@
+<div class="mx-32 my-5 gap-2 flex">
+  <button mat-flat-button (click)="openExamDialog()">
+    <mat-icon> school </mat-icon>
+    أنشئ إختبارا
+  </button>
+</div>
+
+@if(loading){
+<div class="flex justify-center items-center h-100">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+}@else{
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-32">
+  @for (exam of exams; track exam.id) {
+  <mat-card class="exam-card !border-2 !border-gray-300">
+    <mat-card-header>
+      <mat-card-title>{{ exam.title }}</mat-card-title>
+      <mat-card-subtitle>
+        <span
+          [ngClass]="{
+              'text-yellow-600': exam.status === 'submited',
+              'text-green-600': exam.status === 'dated',
+            }"
+        >
+          {{ exam.status == "submited" ? "قيد الإنتظار" : "مؤكد" }}
+        </span>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="mt-4">
+        <p>
+          <strong>نوع الإختبار:</strong>
+          {{ exam?.examType == "oral" ? "شفهي" : "تحريري" }}
+        </p>
+        <p><strong>المدة:</strong> {{ exam?.duration }} دقيقة</p>
+        @if(exam.examType != "oral"){
+        <p><strong>عدد الأسئلة:</strong> {{ exam?.questions?.length }}</p>
+        } @if(exam?.startTime){
+        <p>
+          <strong>تاريخ الإختبار:</strong> {{ exam.startTime | date : "medium" }}
+        </p>
+        } @if(exam?.description){
+        <p><strong>الوصف:</strong> {{ exam.description }}</p>
+        }
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="flex justify-end gap-2 p-4">
+      <button mat-button color="primary" (click)="viewExam(exam)">
+        <mat-icon>visibility</mat-icon>
+        عرض
+      </button>
+      @if(exam.status === 'submited' && !exam.startTime){
+      <button mat-button color="warn" (click)="deleteExam(exam.id)">
+        <mat-icon>delete</mat-icon>
+        حذف
+      </button>
+      } @if(exam.status === 'dated'){
+      <button mat-button color="primary" (click)="startCorrection(exam.id)">
+        <mat-icon>edit</mat-icon>
+        بدء التصحيح
+      </button>
+      }
+    </mat-card-actions>
+  </mat-card>
+  }
+</div>
+}

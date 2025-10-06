@@ -1,0 +1,462 @@
+@if(loading){
+<div class="flex justify-center items-center h-screen">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+}@else{
+
+<mat-drawer-container>
+  <mat-drawer #drawer mode="side" position="end" opened="true">
+    <mat-card appearance="outlined" class="!bg-white !shadow-md !my-5 !ml-5">
+      <mat-card-header>
+        <mat-card-title class="!flex !justify-between !items-center">
+          <p class="almarai text-xl">المسارات :</p>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-action-list>
+          @for(path of paths ;track path.id){
+          <button mat-list-item (click)="selectPath(path)">
+            {{ path.name }}
+          </button>
+
+          }@empty {
+          <p class="almarai text-sm">لا توجد مسارات متاحة</p>
+          }
+        </mat-action-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer>
+
+  <div class="m-5">
+    <mat-card appearance="outlined" class="!bg-white !shadow-md">
+      @if(selectedPath){
+
+      <mat-card-content>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-800">المسار</h2>
+          <div class="flex gap-4 justify-end">
+            <button
+              type="button"
+              mat-raised-button
+              color="primary"
+              (click)="openDialog()"
+            >
+              <mat-icon>add</mat-icon>
+              إضافة مسار
+            </button>
+
+            <button type="button" mat-button (click)="drawer.toggle()">
+              لائحة المسارات
+            </button>
+          </div>
+        </div>
+
+        <form [formGroup]="pathForm" (ngSubmit)="onSubmit()">
+          <!-- Main Path Information -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>الاسم</mat-label>
+              <input matInput formControlName="name" required />
+              @if (pathForm.get('name')?.hasError('required')) {
+              <mat-error> هذا الحقل مطلوب </mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>عنوان الدبلوم</mat-label>
+              <input matInput formControlName="diplomaTitle" required />
+              @if (pathForm.get('diplomaTitle')?.hasError('required')) {
+              <mat-error> هذا الحقل مطلوب </mat-error>
+              }
+            </mat-form-field>
+
+            <div class="flex items-center">
+              <mat-slide-toggle formControlName="isActive" color="primary">
+                نشط
+              </mat-slide-toggle>
+            </div>
+
+            <div class="flex items-center">
+              @if(pathForm.get('isHifd')?.value){
+              <p class="almarai font-bold">هذا مسار لحفظ القرآن الكريم</p>
+              }
+            </div>
+          </div>
+
+          <mat-form-field appearance="outline" class="w-full mb-6">
+            <mat-label>الوصف</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="4"
+            ></textarea>
+            @if (pathForm.get('description')?.hasError('required')) {
+            <mat-error> هذا الحقل مطلوب </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Circles Section for Hifd Paths -->
+          @if(pathForm.get('isHifd')?.value) {
+
+          <div class="mt-8 border-t pt-6">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-bold text-gray-800">الحلقات</h2>
+              <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                (click)="addCircle()"
+              >
+                <mat-icon>add</mat-icon>
+                إضافة حلقة
+              </button>
+            </div>
+
+            <div class="space-y-4">
+              <div formArrayName="circles" class="space-y-4">
+                @for (circle of circles.controls; track $index;let circleIndex
+                =$index) {
+
+                <mat-expansion-panel class="!mb-4 !border !border-green-600">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title
+                      class="flex justify-between items-center w-full"
+                    >
+                      <span
+                        >الحلقة {{ $index + 1 }}:
+                        {{ circle.get("title")?.value || "حلقة جديدة" }}</span
+                      >
+                      <div
+                        class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                      >
+                        طلبة
+                      </div>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <div [formGroupName]="$index">
+                    <div class="flex justify-end mb-3">
+                      <button
+                        type="button"
+                        mat-icon-button
+                        color="warn"
+                        matTooltip="حذف الحلقة"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>اسم الحلقة</mat-label>
+                        <input matInput formControlName="title" required />
+                        <mat-error>هذا الحقل مطلوب</mat-error>
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>الأستاذ</mat-label>
+                        <mat-select
+                          formControlName="teacher"
+                          placeholder="اختر الأستاذ"
+                          required
+                        >
+                          @for(teacher of teachers; track $index) {
+                          <mat-option [value]="teacher.id">
+                            {{ teacher.name }}
+                          </mat-option>
+                          }
+                        </mat-select>
+                        <mat-error>هذا الحقل مطلوب</mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 mb-4">
+                      <mat-form-field appearance="outline">
+                        <mat-label>أيام الحصص</mat-label>
+                        <mat-select
+                          formControlName="daysOfWeek"
+                          required
+                          multiple
+                        >
+                          @for (day of daysOfWeek; track day) {
+                          <mat-option [value]="day.value">{{
+                            day.viewValue
+                          }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                      
+                      <mat-form-field appearance="outline">
+                        <mat-label>وقت البدء</mat-label>
+                        <input
+                          matInput
+                          [matTimepicker]="picker"
+                          formControlName="startTime"
+                          required
+                        />
+                        <mat-timepicker-toggle matIconSuffix [for]="picker" />
+                        <mat-timepicker #picker />
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline">
+                        <mat-label>وقت الانتهاء</mat-label>
+                        <input
+                          matInput
+                          [matTimepicker]="pickerEnd"
+                          formControlName="endTime"
+                          required
+                        />
+                        <mat-timepicker-toggle
+                          matIconSuffix
+                          [for]="pickerEnd"
+                        />
+                        <mat-timepicker #pickerEnd />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+
+                } @if (circles.length === 0) {
+                <div class="text-center p-6 text-gray-500 bg-gray-100 rounded">
+                  لا توجد حلقات. اضغط على "إضافة حلقة" لإضافة حلقة جديدة.
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+          }
+
+          <!-- Levels Section (only for non-hifd paths) -->
+          @if(!pathForm.get('isHifd')?.value) {
+          <div class="mt-8 border-t pt-6">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-bold text-gray-800">المستويات</h2>
+              <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                (click)="addLevel()"
+              >
+                <mat-icon>add</mat-icon>
+                إضافة مستوى
+              </button>
+            </div>
+
+            <div formArrayName="levels" class="space-y-4">
+              @for (level of levels.controls; track $index;let levelIndex =
+              $index) {
+              <mat-expansion-panel class="!mb-4 !border !border-green-600">
+                <mat-expansion-panel-header>
+                  <mat-panel-title
+                    class="flex justify-between items-center w-full"
+                  >
+                    <span
+                      >المستوى {{ $index + 1 }}:
+                      {{ level.get("name")?.value || "مستوى جديد" }}</span
+                    >
+                    <div
+                      class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                    >
+                      {{ getCourses($index).length }} دورات
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div [formGroupName]="$index">
+                  <div class="flex justify-end mb-3">
+                    <button
+                      type="button"
+                      mat-icon-button
+                      color="warn"
+                      (click)="removeLevel($index)"
+                      matTooltip="حذف المستوى"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <mat-form-field appearance="outline" class="w-full">
+                      <mat-label>اسم المستوى</mat-label>
+                      <input matInput formControlName="name" required />
+                      <mat-error>هذا الحقل مطلوب</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-full">
+                      <mat-label>الترتيب</mat-label>
+                      <input
+                        matInput
+                        type="number"
+                        formControlName="order"
+                        min="0"
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>تاريخ البدء والانتهاء</mat-label>
+                    <mat-date-range-input [rangePicker]="levelPicker">
+                      <input
+                        matStartDate
+                        formControlName="startAt"
+                        placeholder="تاريخ البدء"
+                      />
+                      <input
+                        matEndDate
+                        formControlName="endAt"
+                        placeholder="تاريخ الانتهاء"
+                      />
+                    </mat-date-range-input>
+
+                    <mat-datepicker-toggle
+                      matIconSuffix
+                      [for]="levelPicker"
+                    ></mat-datepicker-toggle>
+                    <mat-date-range-picker #levelPicker></mat-date-range-picker>
+
+                    @if (level.get('startAt')?.hasError('required')) {
+                    <mat-error> تاريخ البدء مطلوب </mat-error>
+                    } @if (level.get('endAt')?.hasError('required')) {
+                    <mat-error> تاريخ الانتهاء مطلوب </mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="w-full mb-4">
+                    <mat-label>وصف المستوى</mat-label>
+                    <textarea
+                      matInput
+                      formControlName="description"
+                      rows="2"
+                    ></textarea>
+                  </mat-form-field>
+
+                  <!-- Courses Section -->
+                  <div
+                    formArrayName="courses"
+                    class="mt-6 bg-gray-50 p-4 rounded-lg"
+                  >
+                    <div class="flex justify-between items-center mb-4">
+                      <h4 class="font-medium text-gray-700">
+                        الدورات ({{ getCourses($index).length }})
+                      </h4>
+                    </div>
+
+                    @for (course of getCourses($index).controls; track $index) {
+                    <mat-expansion-panel class="!mb-3">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          {{ course.get("title")?.value || "دورة جديدة" }}
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+
+                      <div [formGroupName]="$index">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                          <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>عنوان الدورة</mat-label>
+                            <input matInput formControlName="title" readonly />
+                            <mat-error>هذا الحقل مطلوب</mat-error>
+                          </mat-form-field>
+
+                          <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>المدرس</mat-label>
+                            <input
+                              matInput
+                              formControlName="teacher_name"
+                              readonly
+                            />
+                          </mat-form-field>
+                        </div>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                          <mat-label>وصف الدورة</mat-label>
+                          <textarea
+                            matInput
+                            readonly
+                            formControlName="description"
+                            rows="2"
+                          ></textarea>
+                        </mat-form-field>
+                      </div>
+                    </mat-expansion-panel>
+                    } @if (getCourses($index).length === 0) {
+                    <div
+                      class="text-center p-4 text-gray-500 bg-gray-100 rounded"
+                    >
+                      لا توجد دورات. اضغط على "إضافة دورة" لإضافة دورة جديدة.
+                    </div>
+                    }
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              } @if (levels.length === 0) {
+              <div class="text-center p-6 text-gray-500 bg-gray-100 rounded">
+                لا توجد مستويات. اضغط على "إضافة مستوى" لإضافة مستوى جديد.
+              </div>
+              }
+            </div>
+          </div>
+          }
+
+          <!-- Form Actions -->
+          <div class="mt-8 flex justify-center items-center">
+            <div class="w-1/4 flex flex-col gap-2">
+              <button type="submit" mat-flat-button color="primary">
+                <mat-icon>save</mat-icon>
+                حفظ المسار التعليمي
+              </button>
+              <button
+                type="button"
+                mat-raised-button
+                class="!bg-red-500 !text-white"
+                (click)="openDeleteDialog()"
+              >
+                <mat-icon>delete</mat-icon>
+                حذف المسار
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+      }@else {
+      <mat-card-header class="!flex !justify-between">
+        <mat-card-title>
+          <p class="almarai text-xl mb-2">إدارة المسارات :</p>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+          <p class="almarai text-sm mb-2">
+            اختر مسارًا من القائمة الجانبية لعرض تفاصيله وتعديله أو قم بإضافة
+            مسار جديد.
+          </p>
+        </mat-card-subtitle>
+
+        <div class="flex gap-4 justify-end">
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="openDialog()"
+          >
+            <mat-icon>add</mat-icon>
+            إضافة مسار
+          </button>
+
+          <button type="button" mat-button (click)="drawer.toggle()">
+            لائحة المسارات
+          </button>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content> </mat-card-content>
+      }
+    </mat-card>
+  </div>
+</mat-drawer-container>
+}

@@ -1,0 +1,27 @@
+<mat-card appearance="outlined" class="!shadow-md !my-5 !mx-56 !p-5 !bg-white">
+    @for(enrollment of enrollments;track $index){
+        <div class="flex justify-between">
+            <div class="flex justify-between items-center gap-2">
+                <mat-icon>
+                    account_circle
+                </mat-icon>
+                {{enrollment.user?.name}}
+            </div>
+            {{enrollment.user?.email}}
+
+
+        </div>
+}@empty {
+    <div class="flex justify-between">
+        <div class="flex justify-center items-center gap-2">
+            <mat-icon>
+                info
+            </mat-icon>
+            هنا تجد الطلبة المسجلين في هذا الدرس
+        </div>
+
+
+    </div>
+}
+</mat-card>
+  

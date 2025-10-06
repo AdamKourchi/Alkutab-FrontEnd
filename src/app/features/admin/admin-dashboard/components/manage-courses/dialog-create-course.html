@@ -1,0 +1,92 @@
+<h2 mat-dialog-title>إضافة دورة جديد</h2>
+<mat-dialog-content class="mat-typography">
+  <form
+    [formGroup]="createCourseForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-5"
+  >
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>الدورة</mat-label>
+      <mat-select formControlName="path" placeholder="اختر الدورة" required>
+        @for( path of paths;track $index){
+
+        <mat-option [value]="path"> {{ path.name }} </mat-option>
+        }
+      </mat-select>
+      @if(createCourseForm.get('path')?.hasError('required')){
+      <mat-error>الدورة مطلوب</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>المستوى</mat-label>
+      <mat-select
+        formControlName="level"
+        placeholder="اختر المستوى"
+        required
+      >
+        @for(level of levels; track $index) {
+        <mat-option [value]="level"> {{ level.name }} </mat-option>
+        }
+      </mat-select>
+      @if(createCourseForm.get('level')?.hasError('required')) {
+      <mat-error>المستوى مطلوب</mat-error>
+      }
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>العنوان</mat-label>
+      <input
+        matInput
+        formControlName="title"
+        placeholder="أدخل عنوان الدورة"
+        required
+        type="text"
+      />
+      @if(createCourseForm.get('title')?.hasError('required')) {
+      <mat-error>العنوان مطلوب</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>الأستاذ</mat-label>
+      <mat-select
+        formControlName="teacher"
+        placeholder="اختر الأستاذ"
+        required
+      >
+        @for(teacher of teachers; track $index) {
+        <mat-option [value]="teacher">
+          {{ teacher.name }}
+        </mat-option>
+        }
+      </mat-select>
+      @if(createCourseForm.get('teacher')?.hasError('required')) {
+      <mat-error>
+        الأستاذ مطلوب
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>الوصف</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="أدخل وصف الدورة"
+        required
+      ></textarea>
+      @if(createCourseForm.get('description')?.hasError('required')){
+      <mat-error>الوصف مطلوب</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>إلغاء</button>
+      <button mat-button type="submit" [disabled]="createCourseForm.invalid">
+        حفظ
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

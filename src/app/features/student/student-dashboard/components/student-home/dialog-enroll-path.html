@@ -1,0 +1,76 @@
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 p-4 sm:p-6">
+  <h2 mat-dialog-title>طلب التسجيل في المسار</h2>
+  <div class="flex gap-2 sm:gap-5 w-full sm:w-auto justify-end">
+    <button mat-button mat-dialog-close class="w-full sm:w-auto">إلغاء</button>
+    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="enrollForm.invalid" class="w-full sm:w-auto">
+      تقديم الطلب
+    </button>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="!p-0 flex flex-col">
+  <form [formGroup]="enrollForm" class="flex-1 flex flex-col gap-4 p-4 sm:p-6 mx-2 sm:mx-10 md:mx-32">
+    <!-- Path Name (Full Width) -->
+    <div class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>المسار</mat-label>
+        <input matInput [value]="data.path.name" readonly>
+      </mat-form-field>
+    </div>
+
+    <!-- Education Level and Age (Two Columns on md+, stacked on mobile) -->
+    <div class="flex flex-col md:flex-row gap-4">
+      <mat-form-field appearance="outline" class="w-full md:w-1/2">
+        <mat-label>المستوى التعليمي</mat-label>
+        <mat-select formControlName="educationLevel" required>
+          <mat-option value="primary">ابتدائي</mat-option>
+          <mat-option value="secondary">إعدادي</mat-option>
+          <mat-option value="high">ثانوي</mat-option>
+          <mat-option value="university">جامعي</mat-option>
+          <mat-option value="other">أخرى</mat-option>
+        </mat-select>
+        <mat-error>هذا الحقل مطلوب</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full md:w-1/2">
+        <mat-label>العمر</mat-label>
+        <input matInput type="number" formControlName="age" required>
+        @if (enrollForm.get('age')?.hasError('required')) {
+          <mat-error>هذا الحقل مطلوب</mat-error>
+        }
+        @if (enrollForm.get('age')?.hasError('min') || enrollForm.get('age')?.hasError('max')) {
+          <mat-error>العمر يجب أن يكون بين 5 و 100 سنة</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Goal (Full Width) -->
+    <div class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>الهدف من التسجيل</mat-label>
+        <textarea matInput formControlName="goal" rows="3" required></textarea>
+        @if (enrollForm.get('goal')?.hasError('required')) {
+          <mat-error>هذا الحقل مطلوب</mat-error>
+        }
+        @if (enrollForm.get('goal')?.hasError('minlength')) {
+          <mat-error>يجب أن يكون الهدف 20 حرف على الأقل</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Memorization Capability (Full Width) -->
+    <div class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>قدرة الحفظ اليومي</mat-label>
+        <mat-select formControlName="memorizationCapability" required>
+          @for (capability of memorizationCapabilities; track capability.value) {
+            <mat-option [value]="capability.value">{{ capability.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>هذا الحقل مطلوب</mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>

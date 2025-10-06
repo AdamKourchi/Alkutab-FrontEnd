@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>إضافة واجب جديد</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4 p-2">
+    <mat-form-field class="w-full">
+      <mat-label>التاريخ</mat-label>
+      <input matInput type="date" formControlName="due_date" required />
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>السورة</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="surat"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (surat of filtredSurats | async;track $index) {
+        <mat-option [value]="surat">{{ surat }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+
+    <div class="flex gap-4">
+      <mat-form-field class="flex-1">
+        <mat-label>من الآية</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="from_aya"
+          min="1"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field class="flex-1">
+        <mat-label>إلى الآية</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="to_aya"
+          min="1"
+          required
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4"></div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button type="button" (click)="close()">إلغاء</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="submit"
+    (click)="submit()"
+    [disabled]="form.invalid"
+  >
+    إضافة
+  </button></mat-dialog-actions
+>

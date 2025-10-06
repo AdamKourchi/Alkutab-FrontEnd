@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>دعوة أستاذ جديد</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="createTeacherForm" (ngSubmit)="onSubmit()" class="flex flex-col  gap-5 ">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>اسم الأستاذ</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="أدخل اسم الأستاذ"
+        required
+      />
+      @if(createTeacherForm.get('name')?.hasError('required')){
+      <mat-error>اسم الأستاذ مطلوب</mat-error>
+      }
+      
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>الحساب الإلكتروني</mat-label>
+      <input
+        matInput
+        formControlName="email"
+        placeholder="أدخل الحساب الإلكتروني"
+        required
+      />
+      @if(createTeacherForm.get('email')?.hasError('required')){
+      <mat-error>الحساب الإلكتروني مطلوب</mat-error>
+      }
+
+      @if(createTeacherForm.get('email')?.hasError('email')){
+        <mat-error>يرجى إدخال بريد إلكتروني صالح</mat-error>
+        }
+    </mat-form-field>
+
+
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>إلغاء</button>
+      <button mat-button type="submit" [disabled]="createTeacherForm.invalid">إرسال</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

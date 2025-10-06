@@ -1,0 +1,152 @@
+import { Component, Inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { Exam } from '../../../../../core/models/Exam.model';
+
+@Component({
+  selector: 'app-view-exam-dialog',
+  template: `
+    <div class="flex justify-between items-center mx-5">
+      <h2 mat-dialog-title>تفاصيل الاختبار</h2>
+      <button mat-button mat-dialog-close type="button">إغلاق</button>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div class="flex flex-col gap-4 mt-5">
+      <!-- Basic Exam Information -->
+      <mat-card>
+        <mat-card-content>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h3 class="font-semibold">عنوان الاختبار</h3>
+              <p>{{ data.exam.title }}</p>
+            </div>
+
+            <div>
+              <h3 class="font-semibold">نوع الاختبار</h3>
+              <p>{{ data.exam.examType === 'oral' ? 'شفهي' : 'تحريري' }}</p>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h3 class="font-semibold">وصف الاختبار</h3>
+            <p>{{ data.exam.description }}</p>
+          </div>
+
+          <div class="mt-4">
+            <h3 class="font-semibold">الحالة</h3>
+            <p>{{ data.exam.status === 'submited' ? 'قيد الإنتظار' : 'مؤكد' }}</p>
+          </div>
+
+          @if(data.exam.isFinal){
+            <div class="mt-4">
+              <p class="text-primary">هذا اختبار نهائي (يحدد انتقال الطالب للمستوى التالي)</p>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Written Exam Section -->
+      @if(data.exam.examType === 'written'){
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title class="!mb-2">تفاصيل الاختبار التحريري</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <h3 class="font-semibold">مدة الاختبار</h3>
+                <p>{{ data.exam.duration }} دقيقة</p>
+              </div>
+            </div>
+
+            <!-- Questions Section -->
+            @if(data.exam.questions && data.exam.questions.length > 0){
+              <div class="mt-4">
+                <h3 class="text-lg font-semibold mb-4">الأسئلة</h3>
+                @for(question of data.exam.questions; track question.id){
+                  <div class="border p-4 rounded-lg mb-4">
+                    <h4 class="text-md font-medium mb-2">سؤال {{ $index + 1 }}</h4>
+                    <p class="mb-2">{{ question.question }}</p>
+                    
+                    <div class="mt-2">
+                      <span class="font-semibold">نوع السؤال: </span>
+                      <span>
+                        {{ 
+                          question.type === 'multiple_choice' ? 'اختيار من متعدد' :
+                          question.type === 'short_answer' ? 'إجابة قصيرة' :
+                          'نص طويل'
+                        }}
+                      </span>
+                    </div>
+
+                    @if(question.type === 'multiple_choice' && question.options){
+                      <div class="mt-2">
+                        <h5 class="font-semibold">الخيارات:</h5>
+                        <ul class="list-disc mr-4">
+                          @for(option of question.options; track option.id){
+                            <li [class.text-primary]="option.id === question.correctAnswer">
+                              {{ option.optionText }}
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                    }
+
+                    @if(question.type === 'short_answer'){
+                      <div class="mt-2">
+                        <h5 class="font-semibold">الإجابة الصحيحة:</h5>
+                        <p>{{ question.correctAnswer }}</p>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <!-- Oral Exam Section -->
+      @if(data.exam.examType === 'oral'){
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>تفاصيل الاختبار الشفهي</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <h3 class="font-semibold">مدة المقابلة لكل طالب</h3>
+                <p>{{ data.exam.duration }} دقيقة</p>
+              </div>
+
+              <div>
+                <h3 class="font-semibold">تعليمات للطالب</h3>
+                <p>{{ data.exam.instructions }}</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  `,
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule
+  ]
+})
+export class ViewExamDialog {
+  constructor(
+    public dialogRef: MatDialogRef<ViewExamDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: { exam: Exam }
+  ) {}
+} 

@@ -1,0 +1,103 @@
+@if(loading){
+<div class="flex justify-center items-center h-screen">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+
+}@else {
+@if (currentEnrollment && !currentEnrollment.graduated) {
+
+<div class="flex flex-col items-center justify-center h-screen px-4">
+  <mat-icon class="text-6xl text-gray-500">check_circle</mat-icon>
+  <h1 class="text-2xl font-bold text-gray-800 mt-4 text-center">تم التسجيل بنجاح!</h1>
+  <p class="text-gray-600 mt-2 text-center">يمكنك الآن البدء في دراستك.</p>
+</div>
+
+}@else if ( pastEnrollmentRequests && pastEnrollmentRequests[0] &&
+pastEnrollmentRequests[0].status === "waiting") {
+
+<div class="flex flex-col items-center justify-center h-screen px-4">
+  <mat-icon class="text-6xl text-yellow-500">hourglass_empty</mat-icon>
+  <h1 class="text-2xl font-bold text-gray-800 mt-4 text-center">
+    طلب التسجيل قيد المراجعة
+  </h1>
+  <p class="text-gray-600 mt-2 text-center">
+    في انتظار الموافقة على تسجيلك في مسار
+    <b>{{ pastEnrollmentRequests[0].path?.name }}</b>
+  </p>
+  <p class="text-gray-500 mt-1 text-center">سيتم إعلامك فور مراجعة طلبك</p>
+</div>
+} @else {
+
+<div class="p-2 sm:p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-x-auto">
+  @for(path of paths;track $index){
+
+  <mat-card appearance="outlined" class="!shadow-lg w-full max-w-full">
+    <mat-card-header id="card" class="!rounded-lg !flex !flex-col !gap-2">
+      <p class="!text-white text-xl font-bold almarai">{{ path.name }}</p>
+      @if(path.isHifd){
+      <p class="!text-white almarai pb-2">مسار لحفظ القرآن الكريم</p>
+      }@else{
+      <p class="!text-white almarai pb-2">
+        مدة الدراسة: {{ calculateTotalDuration(path) }} أشهر
+      </p>
+      }
+    </mat-card-header>
+
+    <mat-card-content class="text-right">
+      <p class="mb-4 text-sm text-gray-700">{{ path.description }}</p>
+
+      @for(level of path.levels; track $index){
+      <div class="mb-3 border-t pt-2">
+        <p class="font-semibold text-indigo-700 almarai">
+          📘 المستوى: {{ level.name }}
+        </p>
+        <ul class="ml-4 list-disc text-sm text-gray-600">
+          @for(course of level.courses; track $index){
+          <li class="mb-2">
+            <span class="font-medium">{{ course.title }}:</span>
+            {{ course.description }} —
+            <span class="text-blue-700 font-semibold"
+              >المعلم: {{ course.teacher?.name }}</span
+            >
+          </li>
+          }
+        </ul>
+      </div>
+      }
+    </mat-card-content>
+
+    <mat-card-actions class="flex flex-col sm:flex-row justify-end gap-2">
+      @if(!path.isActive){
+      <button
+        mat-flat-button
+        color="primary"
+        disabled
+        class="rounded-xl px-6 py-2 w-full sm:w-auto"
+      >
+        <mat-icon class="mr-2">app_registration</mat-icon>
+        قريبا
+      </button>
+      }@else {
+      <button
+        mat-flat-button
+        color="primary"
+        class="rounded-xl px-6 py-2 w-full sm:w-auto"
+        (click)="path.id !== null && enroll(path.id)"
+      >
+        <mat-icon class="mr-2">app_registration</mat-icon>
+        التحق الآن
+      </button>
+
+      }
+    </mat-card-actions>
+  </mat-card>
+
+  }
+</div>
+} 
+
+
+}

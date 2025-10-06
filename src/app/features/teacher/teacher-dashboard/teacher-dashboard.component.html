@@ -1,0 +1,144 @@
+<mat-sidenav-container class="!h-full">
+  <!-- <mat-sidenav mode="push" [(opened)]="opened" class="!border-4 !border-[#4caf50] "> -->
+  <mat-sidenav mode="push" [(opened)]="opened">
+    <div class="my-2 mx-2 p-2 border border-[#4caf4f] rounded-lg">
+      <div class="flex items-center justify-between almarai">
+        <div class="flex items-center gap-2">
+          <mat-icon> account_circle </mat-icon>
+          @if(teacher){
+
+          <span> {{ teacher.name }} </span>
+          }
+        </div>
+        <button
+          class="flex items-center justify-center"
+          mat-icon-button
+          (click)="logout()"
+          style="color: red"
+        >
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+      <small>أستاذ</small>
+    </div>
+
+    <mat-nav-list class="!mx-2">
+      @for (link of links; track link) { @if(link.name == "الدورات" &&
+      link.chlidren && link.chlidren.length > 0){
+
+      <ng-container>
+        <div class="flex flex-col">
+          <button
+            class="flex justify-center items-center py-2 gap-2 hover:bg-[#292a2c1a] hover:rounded-2xl almarai"
+            (click)="link.expanded = !link.expanded"
+          >
+            <div class="flex items-center gap-2">
+              <mat-icon matListItemIcon>
+                {{ link.icon }}
+              </mat-icon>
+              <span class="nav-label">{{ link.name }}</span>
+              <mat-icon>
+                {{ link.expanded ? "expand_less" : "expand_more" }}
+              </mat-icon>
+            </div>
+          </button>
+          <mat-divider class="!mx-5"></mat-divider>
+
+          @if(link.expanded){
+          <div class="mx-6 px-4">
+            @for (child of link.chlidren; track child) {
+            <a
+              class="flex justify-start items-center py-2 gap-2 hover:bg-[#292a2c1a] hover:rounded-2xl almarai"
+              routerLink="{{ child.route }}"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <mat-icon matListItemIcon>
+                {{ child.icon }}
+              </mat-icon>
+              <span class="nav-label">{{ child.title }}</span>
+            </a>
+            <mat-divider class="!mx-5 !w-1/2"></mat-divider>
+            }
+          </div>
+
+          }
+        </div>
+      </ng-container>
+      } @else if (link.name == "حلقات الحفظ") {
+
+      <ng-container>
+        <div class="flex flex-col">
+          <button
+            class="flex justify-center items-center py-2 gap-2 hover:bg-[#292a2c1a] hover:rounded-2xl almarai"
+            (click)="link.expanded = !link.expanded"
+          >
+            <div class="flex items-center gap-2">
+              <mat-icon matListItemIcon>
+                {{ link.icon }}
+              </mat-icon>
+              <span class="nav-label">{{ link.name }}</span>
+              <mat-icon>
+                {{ link.expanded ? "expand_less" : "expand_more" }}
+              </mat-icon>
+            </div>
+          </button>
+          <mat-divider class="!mx-5"></mat-divider>
+
+          @if(link.expanded){
+          <div class="mx-6 px-4">
+            @for (child of link.chlidren; track child) {
+            <a
+              class="flex justify-start items-center py-2 gap-2 hover:bg-[#292a2c1a] hover:rounded-2xl almarai"
+          
+              routerLink="{{ child.route }}"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }"
+
+            >
+
+
+              <mat-icon matListItemIcon>
+                {{ child.icon }}
+              </mat-icon>
+              <span class="nav-label">{{ child.title }}</span>
+            </a>
+            <mat-divider class="!mx-5 !w-1/2"></mat-divider>
+            }
+          </div>
+
+          }
+        </div>
+      </ng-container>
+
+      } @else {
+      <a
+        class="flex justify-center items-center py-2 gap-2 hover:bg-[#292a2c1a] hover:rounded-2xl almarai"
+        routerLink="{{ link.route }}"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <mat-icon matListItemIcon>
+          {{ link.icon }}
+        </mat-icon>
+        <span class="nav-label">{{ link.name }}</span>
+      </a>
+
+      <mat-divider class="!mx-5"></mat-divider>
+
+      } }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button mat-icon-button (click)="toggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>لوحة تحكم الأستاذ </span>
+    </mat-toolbar>
+    <mat-divider></mat-divider>
+
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

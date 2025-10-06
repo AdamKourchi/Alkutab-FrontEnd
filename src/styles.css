@@ -1,0 +1,25 @@
+@import "tailwindcss";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+@font-face {
+    font-family: 'Zahey';
+    src: url('assets/fonts/zahey.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Almarai';
+    src: url('assets/fonts/Almarai/Almarai-Bold.ttf') format('truetype');
+
+}
+
+.zahey {
+    font-family: 'Zahey', sans-serif !important;
+}
+
+.almarai {
+    font-family: 'Almarai', sans-serif !important;
+}
+
+  
