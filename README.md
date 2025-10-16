@@ -61,11 +61,11 @@ Each repository contains its own setup and configuration.
 ## 🖼️ Screenshots
 
 <p align="center">
-  <img src="./screenshots/dashboard.png" alt="Dashboard" width="30%">
+  <img src="./screenshots/kutab.png" width="30%">
   &nbsp;
-  <img src="./screenshots/teacher.png" alt="Teacher Circle" width="30%">
+  <img src="./screenshots/kutab1.png" width="30%">
   &nbsp;
-  <img src="./screenshots/student.png" alt="Student Progress" width="30%">
+  <img src="./screenshots/kutab2.png"  width="30%">
 </p>
 
 ---
