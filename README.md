@@ -66,6 +66,9 @@ Each repository contains its own setup and configuration.
   <img src="./screenshots/kutab1.png" width="30%">
   &nbsp;
   <img src="./screenshots/kutab2.png"  width="30%">
+    &nbsp;
+  <img src="./screenshots/kutab3.png"  width="30%">
+
 </p>
 
 ---
