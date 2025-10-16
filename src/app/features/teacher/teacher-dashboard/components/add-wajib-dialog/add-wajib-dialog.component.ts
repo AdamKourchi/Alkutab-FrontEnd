@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,13 +10,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AsyncPipe } from '@angular/common';
+import { MatCalendar } from '@angular/material/datepicker';
 
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-wajib-dialog',
+  providers: [provideNativeDateAdapter()],
   templateUrl: './add-wajib-dialog.component.html',
   imports: [
     MatFormFieldModule,
@@ -26,6 +30,7 @@ import { map, startWith } from 'rxjs/operators';
     MatButtonModule,
     MatAutocompleteModule,
     AsyncPipe,
+    MatDatepickerModule,
   ],
 })
 export class AddWajibDialogComponent {
@@ -168,6 +173,13 @@ export class AddWajibDialogComponent {
     );
   }
 
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.surats.filter((surat) =>
@@ -178,7 +190,12 @@ export class AddWajibDialogComponent {
   submit() {
     console.log('Form Value:', this.form.value);
     if (this.form.valid) {
-      this.dialogRef.close(this.form.value);
+      const raw = this.form.value;
+      const formatted = {
+        ...raw,
+        due_date: this.formatDate(raw.due_date),
+      };
+      this.dialogRef.close(formatted);
     }
   }
 

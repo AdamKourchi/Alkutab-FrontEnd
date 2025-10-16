@@ -1,11 +1,20 @@
 <h2 mat-dialog-title>إضافة واجب جديد</h2>
 
 <mat-dialog-content>
-  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4 p-2">
-    <mat-form-field class="w-full">
-      <mat-label>التاريخ</mat-label>
-      <input matInput type="date" formControlName="due_date" required />
-    </mat-form-field>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4 p-2" >
+    
+
+<mat-form-field class="w-full">
+  <mat-label>التاريخ</mat-label>
+  <input matInput [matDatepicker]="picker" formControlName="due_date" required>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+
+</mat-form-field>
+
+
+
+
 
     <mat-form-field class="w-full">
       <mat-label>السورة</mat-label>

@@ -10,7 +10,7 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="fill" class="w-sm lg:w-xl">
           <mat-label>البريد الإلكتروني</mat-label>
-          <input matInput formControlName="email" required type="email" />
+          <input matInput formControlName="email" required type="email" dir="ltr" />
           @if(loginForm.get('email')?.hasError('required')){
           <mat-error> يجب إدخال البريد الإلكتروني </mat-error>
 
@@ -24,7 +24,7 @@
         <br>
         <mat-form-field appearance="fill" class="w-sm lg:w-xl">
           <mat-label>كلمة المرور</mat-label>
-          <input matInput type="password" formControlName="password" required />
+          <input matInput type="password" formControlName="password" required dir="ltr" />
           @if(loginForm.get('password')?.hasError('required')){
             <mat-error> يجب إدخال كلمة المرور </mat-error>
   

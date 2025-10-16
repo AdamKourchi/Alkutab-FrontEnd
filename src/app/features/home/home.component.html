@@ -1,12 +1,12 @@
 <div class="backgroundImage h-screen">
-  <nav class="flex justify-between items-center lg:py-5 mx-2 lg:mx-10 py-5">
+  <nav class="flex justify-between items-center lg:py-2 mx-2 lg:mx-10 py-5">
     <div class="flex justify-between items-center">
       <div class="flex justify-center items-center gap-0">
         <img class="w-72" src="assets/images/full-logo.png" />
       </div>
     </div>
 
-    <div>
+    <nav>
       <div class="hidden lg:block">
         <button
           mat-button
@@ -33,16 +33,21 @@
           حول المنصة
         </button>
       </div>
-    </div>
+    </nav>
 
     <div class="hidden lg:flex gap-2">
-      <button mat-flat-button class="!text-sm !font-semibold" routerLink="login">
+      <button
+        mat-flat-button
+        class="!text-sm !font-semibold"
+        routerLink="login"
+      >
         تسجيل الدخول
       </button>
       <button mat-button class="!text-sm !font-semibold" routerLink="register">
         الإشترك في المنصة
       </button>
     </div>
+
     <button class="lg:!hidden" mat-icon-button [matMenuTriggerFor]="menu">
       <img src="assets/icons/menu.svg" alt="" />
     </button>
@@ -81,20 +86,28 @@
 
       <mat-divider class="!border-gray-400 !mx-2 !my-0"></mat-divider>
 
-      <button mat-menu-item class="!text-sm lg:!text-lg !font-semibold" routerLink="login">
+      <button
+        mat-menu-item
+        class="!text-sm lg:!text-lg !font-semibold"
+        routerLink="login"
+      >
         تسجيل الدخول
       </button>
 
       <mat-divider class="!border-gray-400 !mx-2 !my-0"></mat-divider>
 
-      <button mat-menu-item class="!text-sm lg:!text-lg !font-semibold" routerLink="register">
+      <button
+        mat-menu-item
+        class="!text-sm lg:!text-lg !font-semibold"
+        routerLink="register"
+      >
         الإشترك في المنصة
       </button>
     </mat-menu>
   </nav>
 
-  <div class="text-center">
-    <p class="almarai text-xl lg:text-4xl leading-relaxed px-10 lg:px-56 pt-32">
+  <div class="text-center h-[calc(100vh-250px)]">
+    <p class="almarai text-xl lg:text-2xl leading-relaxed px-10 lg:px-56 pt-20">
       تقدم منصة <span class="zahey">الكُتّاب الإلكتروني</span> خدمات الكتاتيب
       القرآنية عبر الشبكة بأساليب مبتكرة تسهّل الوصول إلى التعليم القرآني
       للجميع.
@@ -171,15 +184,13 @@
       </div>
 
       <mat-divider class="!z-10 !my-5"></mat-divider>
-      
-
 
       <div
         class="flex flex-col justify-center items-center group cursor-pointer"
         (click)="scrollTo('matn')"
       >
         <svg
-          class="group-hover:fill-green-500 w-[50px] lg:w-[100px]"
+          class="group-hover:fill-green-500 w-[50px] lg:w-[50px]"
           fill="#000000"
           version="1.1"
           id="Layer_1"
@@ -245,21 +256,17 @@
           مسار المتون
         </p>
       </div>
-
-
     </div>
 
-    <div class="justify-center hidden lg:flex">
-      <div class="laptopBackground w-[700px] h-[700px]">
-        <div
-          class="flex justify-center gap-10 absolute top-50 left-1/2 transform -translate-x-1/2 z-30"
-        >
+    <div class="justify-center hidden lg:flex h-full">
+      <div class="laptopBackground w-full h-full">
+        <div class="flex justify-center gap-5 z-30 mt-20">
           <div
             class="flex flex-col justify-center items-center group cursor-pointer z-30"
             (click)="scrollTo('quran')"
           >
             <svg
-              class="group-hover:fill-green-500 w-[50px] lg:w-[100px]"
+              class="group-hover:fill-green-500 w-[50px] lg:w-[50px]"
               fill="#000000"
               version="1.1"
               id="Capa_1"
@@ -328,7 +335,7 @@
             (click)="scrollTo('matn')"
           >
             <svg
-              class="group-hover:fill-green-500 w-[50px] lg:w-[100px]"
+              class="group-hover:fill-green-500 w-[50px] lg:w-[50px]"
               fill="#000000"
               version="1.1"
               id="Layer_1"
@@ -400,114 +407,123 @@
   </div>
 </div>
 
-<div class="bg-[#4caf50] mb-10 p-3 text-center" id="quran">
-  <p class="text-white almarai text-xl lg:text-3xl mx-10 lg:mx-56">مسار القرآن الكريم</p>
+<div class="bg-[#4caf50] p-3 text-center" id="quran">
+  <p class="text-white almarai text-xl lg:text-3xl mx-10 lg:mx-56">
+    مسار القرآن الكريم
+  </p>
 </div>
 
-<div class="flex justify-between items-center px-5 lg:px-56 py-0 lg:py-20 bg-[#fcfcfc]">
+<div
+  class="flex justify-between items-center px-5 lg:px-56 py-5 lg:py-10 bg-[#fcfcfc]"
+>
   <div class="lg:w-1/2">
-    <div class="my-10">
-      <div class="">
-        <div class="flex justify-between items-center">
-          <div class="">
-            <p class="almarai text-xl lg:text-2xl leading-relaxed">البرنامج</p>
-            <li class="almarai text-sm lg:text-xl leading-relaxed">
-              يُركّز هذا المسار على تعليم علوم القرآن، بما في ذلك التجويد
-              بقواعده وحفظ الآيات و تتم الدراسة تحت إشراف المعلم، كما توفّر
-              المنصة دروسًا تفاعلية وفوائد يمكن للطالب الاستفادة منها بشكل ذاتي.
-            </li>
-          </div>
-        </div>
-      </div>
-    </div>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>البرنامج</mat-card-title>
+      </mat-card-header>
 
-    <div class="my-10">
-      <div class="">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="almarai text-xl lg:text-2xl leading-relaxed">المنهجية</p>
-            <li class="almarai text-sm lg:text-xl leading-relaxed">
-              يعلم الطالب بشكل تطبيقي قواعد التجويد أثناء حفظه للسور عن طريق
-              السماع للمعلم و تصحيح أخطائه.
-            </li>
-          </div>
-        </div>
-      </div>
-    </div>
+      <mat-card-content>
+        <p>
+          ركّز هذا المسار على تعليم علوم القرآن، بما في ذلك التجويد بقواعده وحفظ
+          الآيات و تتم الدراسة تحت إشراف المعلم، كما توفّر المنصة دروسًا تفاعلية
+          وفوائد يمكن للطالب الاستفادة منها بشكل ذاتي.
+        </p>
+      </mat-card-content>
+    </mat-card>
 
-    <div class="my-10">
-      <div class="">
-        <div class="flex justify-between items-center">
-          <div class="">
-            <p class="almarai text-xl lg:text-2xl leading-relaxed">المنصة</p>
-            <li class="almarai text-sm lg:text-xl leading-relaxed">
-              تنظم المنصة مواعيد اللقاء مع المعلم و توفر دروسًا تفاعلية وفوائد
-              يمكن للطالب الاستفادة منها بشكل ذاتي.
-            </li>
-          </div>
-        </div>
-      </div>
-    </div>
+    <br />
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title> المنهجية</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>
+          يعلم الطالب بشكل تطبيقي قواعد التجويد أثناء حفظه للسور عن طريق السماع
+          للمعلم و تصحيح أخطائه.
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <br />
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title> المنصة</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>
+          تنظم المنصة مواعيد اللقاء مع المعلم و توفر دروسًا تفاعلية وفوائد يمكن
+          للطالب الاستفادة منها بشكل ذاتي.
+        </p>
+      </mat-card-content>
+    </mat-card>
   </div>
   <div class="lg:w-1/2 hidden lg:flex justify-center">
-    <img width="400px" src="assets/icons/quran.svg" alt="" />
+    <img width="300px" src="assets/icons/quran.svg" alt="" />
   </div>
 </div>
 
-<div class="bg-[#4caf50] mb-10 p-3 text-center" id="matn">
-  <p class="text-white almarai text-xl lg:text-3xl mx-10 lg:mx-56">مسار المتون</p>
+<div class="bg-[#4caf50] p-3 text-center" id="matn">
+  <p class="text-white almarai text-xl lg:text-3xl mx-10 lg:mx-56">
+    مسار المتون
+  </p>
 </div>
 
-<div class="flex justify-between items-center px-5 lg:px-56 py-0 lg:py-20 bg-[#fcfcfc]">
-  
+<div
+  class="flex justify-between items-center px-5 lg:px-56 py-5 lg:py-10 bg-[#fcfcfc]"
+>
   <div class="lg:w-1/2 justify-center hidden lg:flex">
-    <img width="300px" src="assets/images/books.svg"/>
+    <img width="200px" src="assets/images/books.svg" />
   </div>
 
   <div class="lg:w-1/2">
-    <div class="my-10">
-      <div class="">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="almarai text-xl lg:text-2xl leading-relaxed">البرنامج</p>
-            <li class="almarai text-sm lg:text-xl leading-relaxed">
-              يُركّز هذا المسار على تدارس مختلف المتون العلمية و شرحها من طرف
-              المعلم متيحا الفرصة للطلبة لطرح إشكالاتهم و إستفساراتهم.
-            </li>
-          </div>
-        </div>
-      </div>
-    </div>
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>البرنامج</mat-card-title>
+      </mat-card-header>
 
-    <div class="my-10">
-      <div class="">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="almarai text-xl lg:text-2xl leading-relaxed">المنهجية</p>
-            <li class="almarai text-sm lg:text-xl leading-relaxed">
-              يحضر الطالب حصصا مباشرة للمعلم أثناء شرحه للمتن أو يشاهد مقاطع
-              مسجلة.
-            </li>
-          </div>
-        </div>
-      </div>
-    </div>
+      <mat-card-content>
+        <p>
+          رركّز هذا المسار على تدارس مختلف المتون العلمية و شرحها من طرف المعلم
+          متيحا الفرصة للطلبة لطرح إشكالاتهم و إستفساراتهم.
+        </p>
+      </mat-card-content>
+    </mat-card>
 
-    <div class="my-10">
-      <div class="">
-        <div class="flex justify-between items-center">
-          <div class="">
-            <p class="almarai text-xl lg:text-2xl leading-relaxed">المنصة</p>
-            <li class="almarai text-sm lg:text-xl leading-relaxed">
-              تنظم المنصة جدول الطالب و تبقيه على اطلاع بمواعد الدروس و
-              مواضيعها، و توفر له كذلك إمكانية التواصل المباشر مع المعلم أثناء
-              الحصة أو بعدها.
-            </li>
-          </div>
-        </div>
-      </div>
-    </div>
+    <br />
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title> المنهجية</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>
+          ي يحضر الطالب حصصا مباشرة للمعلم أثناء شرحه للمتن أو يشاهد مقاطع
+          مسجلة.
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <br />
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title> المنصة</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>
+          تنظم المنصة جدول الطالب و تبقيه على اطلاع بمواعد الدروس و مواضيعها، و
+          توفر له كذلك إمكانية التواصل المباشر مع المعلم أثناء الحصة أو بعدها.
+        </p>
+      </mat-card-content>
+    </mat-card>
   </div>
+
 </div>
 
 <div class="footer bg-[#efefef] p-3">

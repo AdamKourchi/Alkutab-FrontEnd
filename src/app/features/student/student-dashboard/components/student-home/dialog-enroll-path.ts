@@ -47,14 +47,10 @@ export class DialogEnrollPath {
   enrollForm: FormGroup;
 
   memorizationCapabilities = [
-    { value: 'quarter', label: 'ربع حزب' },
-    { value: 'half_hizb', label: 'نصف حزب' },
-    { value: 'hizb', label: 'حزب كامل' },
-    { value: 'two_hizb', label: 'حزبان' },
-    { value: 'three_hizb', label: 'ثلاثة أحزاب' },
-    { value: 'four_hizb', label: 'أربعة أحزاب' },
-    { value: 'five_hizb', label: 'خمسة أحزاب' },
-    { value: 'juz', label: 'جزء كامل' }
+    { value: 'half_eight', label: 'نصف الثمن' },
+    { value: 'eight', label: 'الثمن' },
+    { value: 'quarter', label: 'الربع' },
+    { value: 'other', label: 'اخرى' },
   ];
 
   constructor(

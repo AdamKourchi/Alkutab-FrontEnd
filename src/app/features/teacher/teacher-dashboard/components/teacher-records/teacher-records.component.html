@@ -2,7 +2,6 @@
   <!-- Left: Student Details -->
   <div class="flex-1 p-6">
     @if(!loading){
-      
     <ng-container >
       <mat-card
         appearance="outlined"
@@ -30,7 +29,7 @@
               }}
             </p>
           </div>
-          <div class="space-x-2">
+          <div class="flex gap-2">
             <button mat-flat-button (click)="openAddWajibDialog()">
               <mat-icon>add</mat-icon>
               إضافة واجب
@@ -57,13 +56,11 @@
       }
     </ng-container>
     }@else {
-      Test
     <ng-template>
       <div class="flex items-center justify-center h-full">
         <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
       </div>
     </ng-template>
-    Test
     }
   </div>
 

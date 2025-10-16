@@ -18,10 +18,8 @@ import {
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 
-import { MiniTeacherRecordsComponent } from '../../features/teacher/teacher-dashboard/components/mini-teacher-records/mini-teacher-records.component';
-import { ManageScheduleComponent } from '../../features/teacher/teacher-dashboard/components/manage-schedule/manage-schedule.component';
-import { TeacherLiveCircleComponent } from '../../features/teacher/teacher-dashboard/components/teacher-live-circle/teacher-live-circle.component';
 import { TeacherRecordsComponent } from '../../features/teacher/teacher-dashboard/components/teacher-records/teacher-records.component';
+
 @Component({
   selector: 'app-circle-live-session',
   imports: [
@@ -44,6 +42,8 @@ export class CircleLiveSessionComponent {
   roomName!: string;
   role = localStorage.getItem('authRole') || '';
   user = JSON.parse(localStorage.getItem('authUser') || '{}');
+
+  private jitsiApi: any = null;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -99,30 +99,71 @@ export class CircleLiveSessionComponent {
 
   startConference(): void {
     const container = document.querySelector('#jitsi-container');
-
     if (!container) {
       console.error('Jitsi container element is not available in the DOM.');
       return;
     }
-
     if (!this.circle) {
       console.error('Session data is not available.');
       return;
     }
 
+    const isModerator = this.role === 'teacher';
+
     const options = {
       roomName: this.circle.title,
       width: '100%',
       height: '100%',
-      parentNode: container, // Attach to the container
+      parentNode: container,
       configOverwrite: {
         defaultLanguage: 'ar',
         startWithAudioMuted: false,
         disableSimulcast: false,
         prejoinConfig: {
-          enabled: true, // still show prejoin
-          hideDisplayName: true, // hide the name field
+          enabled: true,
+          hideDisplayName: true,
         },
+        // Breakout rooms configuration
+        breakoutRooms: {
+          hideAddRoomButton: !isModerator, 
+          hideAutoAssignButton: !isModerator,
+          hideJoinRoomButton: !isModerator, 
+        },
+        // Hide invite button for non-moderators
+        toolbarButtons: isModerator
+          ? undefined
+          : [
+              'camera',
+              'chat',
+              'closedcaptions',
+              'desktop',
+              'download',
+              'embedmeeting',
+              'etherpad',
+              'feedback',
+              'filmstrip',
+              'fullscreen',
+              'hangup',
+              'help',
+              'highlight',
+              'microphone',
+              'noisesuppression',
+              'participants-pane',
+              'profile',
+              'raisehand',
+              'recording',
+              'security',
+              'select-background',
+              'settings',
+              'shareaudio',
+              'sharedvideo',
+              'shortcuts',
+              'stats',
+              'tileview',
+              'toggle-camera',
+              'videoquality',
+              'whiteboard',
+            ],
       },
       interfaceConfigOverwrite: {
         DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
@@ -130,25 +171,39 @@ export class CircleLiveSessionComponent {
       },
       userInfo: {
         displayName: this.user.name,
+
+        ...(isModerator && { moderator: true }),
       },
     };
 
     const api = new (window as any).JitsiMeetExternalAPI(this.domain, options);
 
-    // Optional: add event handlers
     api.addEventListener('videoConferenceJoined', () => {
-      console.log('Teacher joined the class');
+      console.log('User joined the conference');
+
+      if (isModerator) {
+        // Grant moderator rights
+        api.executeCommand('toggleLobby', true); 
+      }
     });
 
-    api.addEventListener('videoConferenceLeft', () => {
-      console.log('Conference ended.');
-
-      this.role == 'teacher'
+    // This only triggers when the main conference is actually closed
+    api.addEventListener('readyToClose', () => {
+      console.log('Conference fully ended - user closed the window/tab');
+      this.role === 'teacher'
         ? this.endLiveCircle()
         : this.navigateToDashboard();
     });
 
-    this.loading = false; // Hide the loading screen
+
+    this.loading = false;
+  }
+
+  kickParticipant(participantId: string): void {
+    if (this.jitsiApi && this.role === 'teacher') {
+      this.jitsiApi.executeCommand('kickParticipant', participantId);
+      console.log('Kicked participant:', participantId);
+    }
   }
 
   endLiveCircle() {
@@ -165,7 +220,7 @@ export class CircleLiveSessionComponent {
   }
 
   navigateToDashboard() {
-    this.router.navigate([`/student/dashboard/circle/${this.circle.id}/live/` ]);
+    this.router.navigate([`/student/dashboard/circle/${this.circle.id}/live/`]);
   }
 }
 

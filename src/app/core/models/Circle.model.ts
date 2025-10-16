@@ -38,8 +38,6 @@ export class Circle {
       user_id: this.teacher?.id
       , days_of_week: this.daysOfWeek,
       link: this.link,
-
-        
       start_time: this.startTime,
       end_time: this.endTime,
     };

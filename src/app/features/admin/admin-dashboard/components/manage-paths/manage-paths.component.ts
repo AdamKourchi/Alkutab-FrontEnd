@@ -487,6 +487,8 @@ export class ManagePathsComponent {
             null
           ),
           circle.daysOfWeek || [],
+          "offline",
+          "",
           circle.startTime || null,
           circle.endTime || null
         );
