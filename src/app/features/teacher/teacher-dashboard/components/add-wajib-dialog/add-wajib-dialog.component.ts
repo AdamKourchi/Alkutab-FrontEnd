@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AsyncPipe } from '@angular/common';
-import { MatCalendar } from '@angular/material/datepicker';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -31,6 +31,7 @@ import { map, startWith } from 'rxjs/operators';
     MatAutocompleteModule,
     AsyncPipe,
     MatDatepickerModule,
+    MatCheckboxModule
   ],
 })
 export class AddWajibDialogComponent {
@@ -163,6 +164,7 @@ export class AddWajibDialogComponent {
       surat: ['', Validators.required],
       from_aya: [1, [Validators.required, Validators.min(1)]],
       to_aya: [1, [Validators.required, Validators.min(1)]],
+      isRev : []
     });
   }
 

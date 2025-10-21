@@ -36,7 +36,7 @@ export class StudentsService {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     try {
-      const response = await axios.get(`${this.baseUrl}students-by-circle/${circleId}`, { headers });  
+      const response = await axios.get(`${this.baseUrl}students-by-circle/${circleId}`, { headers });
       return response.data.map((studentData: any) => User.fromApi(studentData));
     } catch (error) {
       throw error;

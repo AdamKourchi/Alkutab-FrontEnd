@@ -64,6 +64,16 @@ export class TeacherRecordsComponent {
       editor: 'input',
       editorParams: { elementAttributes: { type: 'date' } },
       width: 150,
+      formatter: (cell: any) => {
+        const isRev = cell.getRow().getData().isRev;
+        const value = cell.getValue();
+        const base = 'font-bold';
+        if (isRev) {
+          return `<span class="${base}"><span class="material-icons align-middle text-green-500">repeat</span> ${value} </span>`;
+        } else {
+          return `<span class="${base}"> ${value} </span>`;
+        }
+      },
     },
 
     { title: 'السورة', field: 'surat', headerSort: false, hozAlign: 'center' },
@@ -212,6 +222,7 @@ export class TeacherRecordsComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
       if (result) {
         this.wajibService
           .createWajib(result, this.selectedStudent)
