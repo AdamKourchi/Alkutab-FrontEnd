@@ -64,6 +64,16 @@ export class TeacherRecordsComponent {
       editor: 'input',
       editorParams: { elementAttributes: { type: 'date' } },
       width: 150,
+      formatter: (cell: any) => {
+        const isRev = cell.getRow().getData().isRev;
+        const value = cell.getValue();
+        const base = 'font-bold';
+        if (isRev) {
+          return `<span class="${base}"><span class="material-icons align-middle text-green-500">repeat</span> ${value} </span>`;
+        } else {
+          return `<span class="${base}"> ${value} </span>`;
+        }
+      },
     },
 
     { title: 'السورة', field: 'surat', headerSort: false, hozAlign: 'center' },
@@ -84,25 +94,28 @@ export class TeacherRecordsComponent {
       field: 'mark',
       formatter: (cell: any) => {
         const value = cell.getValue();
-        if (value === 'vg') {
-          return `<span class="font-bold text-green-500" >جيد جدا</span>`;
-        } else if (value === 'g') {
-          return `<span class="font-bold text-blue-500"  > جيد</span>`;
-        } else if (value === 'p') {
-          return `<span class="font-bold text-yellow-500"  > حسن</span>`;
-        } else if (value === 'r') {
-          return `<span  class="font-bold text-red-500">  إعادة</span>`;
-        }
+        const base = 'font-bold';
 
-        return value || '-';
+        const map: Record<string, string> = {
+          pp: `<span class="${base} text-yellow-400 animate-pulse"><span class="material-icons align-middle text-yellow-400">star</span>ممتاز مرتفع</span>`,
+          p: `<span class="${base} text-emerald-700"><span class="material-icons align-middle text-emerald-700">done_all</span>ممتاز</span>`,
+          vg: `<span class="${base} text-green-500"><span class="material-icons align-middle text-green-500">check</span>جيد جدا</span>`,
+          g: `<span class="${base} text-blue-500">جيد</span>`,
+          n: `<span class="${base}">حسن</span>`,
+          r: `<span class="${base} text-red-500">إعادة</span>`,
+        };
+
+        return map[value] || '-';
       },
-      width: 100,
+      width: 130,
       editor: 'list',
       editorParams: {
         values: {
+          pp: 'ممتاز مرتفع',
+          p: 'ممتاز',
           vg: 'جيد جدا',
           g: 'جيد',
-          p: 'حسن',
+          n: 'حسن',
           r: 'إعادة',
         },
       },
@@ -209,6 +222,7 @@ export class TeacherRecordsComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
       if (result) {
         this.wajibService
           .createWajib(result, this.selectedStudent)

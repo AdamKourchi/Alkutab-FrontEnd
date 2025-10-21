@@ -88,22 +88,14 @@
                     <div class="flex flex-col gap-1">
                       <span class="text-sm text-gray-600">قدرة الحفظ:</span>
                       <span class="font-medium">{{
-                        application?.memorizationCapability === "quarter"
-                          ? "ربع حزب"
-                          : application?.memorizationCapability === "half_hizb"
-                          ? "نصف حزب"
-                          : application?.memorizationCapability === "hizb"
-                          ? "حزب كامل"
-                          : application?.memorizationCapability === "two_hizb"
-                          ? "حزبان"
-                          : application?.memorizationCapability === "three_hizb"
-                          ? "ثلاثة أحزاب"
-                          : application?.memorizationCapability === "four_hizb"
-                          ? "أربعة أحزاب"
-                          : application?.memorizationCapability === "five_hizb"
-                          ? "خمسة أحزاب"
-                          : application?.memorizationCapability === "juz"
-                          ? "جزء كامل"
+                        application?.memorizationCapability === "half_eight"
+                          ? "نصف الثمن"
+                          : application?.memorizationCapability === "eight"
+                          ? "الثمن"
+                          : application?.memorizationCapability === "quarter"
+                          ? "الربع"
+                          : application?.memorizationCapability === "other"
+                          ? "اخرى"
                           : "-"
                       }}</span>
                     </div>

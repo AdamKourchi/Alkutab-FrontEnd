@@ -23,7 +23,7 @@
         <!-- Email Field -->
         <mat-form-field appearance="fill" class="w-xl">
           <mat-label>البريد الإلكتروني</mat-label>
-          <input matInput formControlName="email" placeholder="أدخل بريدك الإلكتروني" />
+          <input matInput formControlName="email" placeholder="أدخل بريدك الإلكتروني" dir="ltr" />
           @if(registerForm.get('email')?.hasError('required')) {
             <mat-error>يجب إدخال البريد الإلكتروني</mat-error>
           }
@@ -36,7 +36,7 @@
         <!-- Password Field -->
         <mat-form-field appearance="fill" class="w-xl">
           <mat-label>كلمة المرور</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="أدخل كلمة المرور" />
+          <input matInput type="password" formControlName="password" placeholder="أدخل كلمة المرور" dir="ltr" />
           @if(registerForm.get('password')?.hasError('required')) {
             <mat-error>يجب إدخال كلمة المرور</mat-error>
           }
@@ -49,7 +49,7 @@
         <!-- Confirm Password Field -->
         <mat-form-field appearance="fill" class="w-xl">
           <mat-label>تأكيد كلمة المرور</mat-label>
-          <input matInput type="password" formControlName="password_confirmation" placeholder="أعد إدخال كلمة المرور" />
+          <input dir="ltr" matInput type="password" formControlName="password_confirmation" placeholder="أعد إدخال كلمة المرور" />
           @if(registerForm.get('confirmPassword')?.hasError('required')) {
             <mat-error>يجب إدخال تأكيد كلمة المرور</mat-error>
           }
