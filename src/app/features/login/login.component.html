@@ -10,7 +10,13 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="fill" class="w-sm lg:w-xl">
           <mat-label>البريد الإلكتروني</mat-label>
-          <input matInput formControlName="email" required type="email" dir="ltr" />
+          <input
+            matInput
+            formControlName="email"
+            required
+            type="email"
+            dir="ltr"
+          />
           @if(loginForm.get('email')?.hasError('required')){
           <mat-error> يجب إدخال البريد الإلكتروني </mat-error>
 
@@ -21,20 +27,26 @@
           }
         </mat-form-field>
         <br />
-        <br>
+        <br />
         <mat-form-field appearance="fill" class="w-sm lg:w-xl">
           <mat-label>كلمة المرور</mat-label>
-          <input matInput type="password" formControlName="password" required dir="ltr" />
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            required
+            dir="ltr"
+          />
           @if(loginForm.get('password')?.hasError('required')){
-            <mat-error> يجب إدخال كلمة المرور </mat-error>
-  
-            }
-            
-      
+          <mat-error> يجب إدخال كلمة المرور </mat-error>
+
+          }
         </mat-form-field>
-        <br>
         <br />
-        <button mat-flat-button color="primary" class="w-sm lg:w-xl">دخول</button>
+        <br />
+        <button mat-flat-button color="primary" class="w-sm lg:w-xl">
+          دخول
+        </button>
         <!-- Error message -->
         @if(errorMessage){
         <div class="error-message text-red-500 mt-4">
@@ -44,13 +56,13 @@
         <div class="register-link">
           <span>ليس لديك حساب؟</span>
           <a routerLink="/register">سجل هنا</a>
-
-          
         </div>
       </form>
 
       <div id="footer">
-        <img class="w-50" src="assets/images/full-logo.png" alt="" />
+        <a href="/">
+          <img class="w-50" src="assets/images/full-logo.png" alt="" />
+        </a>
       </div>
     </div>
   </div>

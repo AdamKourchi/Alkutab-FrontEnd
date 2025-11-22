@@ -1,11 +1,21 @@
-.backgroundImage{
+.backgroundImage {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden; /* important */
+}
+
+.backgroundImage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     background-image: url('/assets/images/background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh;
-    width: 100%;
-    position: relative;
+    filter: blur(2px);
+    transform: scale(1.1); /* avoids blur edges */
+    z-index: -1;
 }
 
 .laptopBackground{
